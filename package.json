@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rmarx/quicker.git"
+    "url": "git+https://github.com/ss1119/switching-prioritization.git"
   },
   "keywords": [
     "QUIC"
@@ -17,9 +17,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rmarx/quicker/issues"
+    "url": "https://github.com/ss1119/switching-prioritization/issues"
   },
-  "homepage": "https://github.com/rmarx/quicker#readme",
+  "homepage": "https://github.com/ss1119/switching-prioritization#readme",
   "devDependencies": {
     "@types/node": "^8.10.40",
     "typescript": "^5.0.4"
