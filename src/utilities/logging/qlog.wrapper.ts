@@ -63,10 +63,10 @@ export class QlogWrapper {
     VerboseLogging.getInstance(); // make sure VerboseLogging is created, since it initializes log4js properly
 
     // do not have the possibility of a NETWORK vantagepoint here, that's for things like wireshark/TCPDUMP
-    let vantagePoint: qlog.VantagePointType =
+    let vantagePoint: qlog.VantagePoint =
       endpointType === EndpointType.Client
-        ? qlog.VantagePointType.client
-        : qlog.VantagePointType.server;
+        ? qlog.VantagePoint.CLIENT
+        : qlog.VantagePoint.SERVER;
 
     this.logger = getLogger("qlog");
     if (Constants.QLOG_FILE_NAME !== undefined) {
@@ -150,7 +150,7 @@ export class QlogWrapper {
 
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "PATH_UPDATE",
       "NEW_CONNECTION",
       data,
@@ -195,7 +195,7 @@ export class QlogWrapper {
 
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "PACKET_TX", //qlog.TransportEventType.TRANSPORT_PACKET_TX,
       trigger,
       this.packetToQlog(packet),
@@ -210,7 +210,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       qlog.TransportEventType.TRANSPORT_PACKET_RX,
       trigger,
       this.packetToQlog(packet),
@@ -301,7 +301,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "CONNECTION_ID_UPDATE",
       trigger,
       {
@@ -317,7 +317,7 @@ export class QlogWrapper {
   public onSpinbitToggle(oldValue: number, newValue: number) {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "SPINBIT_TOGGLE",
       qlog.TransporEventTrigger.LINE,
       {
@@ -354,7 +354,7 @@ export class QlogWrapper {
 
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "STREAM_STATE_UPDATE",
       trigger,
       {
@@ -369,7 +369,7 @@ export class QlogWrapper {
   public onLocalTransportParametersChange(tps: TransportParameters) {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "TRANSPORT_PARAMETERS_UPDATE",
       "DEFAULT",
       {
@@ -384,7 +384,7 @@ export class QlogWrapper {
   public onRemoteTransportParametersChange(tps: TransportParameters) {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       "TRANSPORT_PARAMETERS_UPDATE",
       "DEFAULT",
       {
@@ -413,7 +413,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       qlog.TransportEventType.MAXSTREAMDATA_NEW,
       trigger,
       {
@@ -428,7 +428,7 @@ export class QlogWrapper {
   onFrame_MaxData(frame: MaxDataFrame, trigger: "PACKET_RX" | "PACKET_TX") {
     let evt: any = [
       123,
-      qlog.EventCategory.transport,
+      qlog.EventCategory.TRANSPORT,
       qlog.TransportEventType.MAXDATA_NEW,
       trigger,
       {
@@ -449,7 +449,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.recovery,
+      qlog.EventCategory.RECOVERY,
       "PACKET_LOST",
       trigger,
       {
@@ -470,7 +470,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.recovery,
+      qlog.EventCategory.RECOVERY,
       qlog.RecoveryEventType.RTT_UPDATE,
       trigger,
       {
@@ -493,7 +493,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.recovery,
+      qlog.EventCategory.RECOVERY,
       qlog.RecoveryEventType.CWND_UPDATE,
       trigger,
       {
@@ -514,7 +514,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.recovery,
+      qlog.EventCategory.RECOVERY,
       qlog.RecoveryEventType.BYTES_IN_FLIGHT_UPDATE,
       trigger,
       {
@@ -533,7 +533,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.recovery,
+      qlog.EventCategory.RECOVERY,
       qlog.RecoveryEventType.LOSS_DETECTION_ARMED,
       trigger,
       {
@@ -553,7 +553,7 @@ export class QlogWrapper {
   ) {
     let evt: any = [
       123,
-      qlog.EventCategory.recovery,
+      qlog.EventCategory.RECOVERY,
       qlog.RecoveryEventType.LOSS_DETECTION_TRIGGERED,
       trigger,
       {
