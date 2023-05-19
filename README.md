@@ -8,11 +8,11 @@ IETF QUIC と HTTP/3 プロトコルの NodeJS/TypeScript での実装(https://g
 <br/>
 コンテナは以下のコマンドでサーバーを起動しています：
 
-> node ./out/http/http3/server/demoserver.ts 127.0.0.1 4433 ./keys/selfsigned_default.key ./keys/selfsigned_default.crt
+> node ./outcd/http/http3/server/demoserver.js 127.0.0.1 4433 ./keys/selfsigned_default.key ./keys/selfsigned_default.crt
 
 クライアントは以下のように起動します：
 
-> node ./out/http/http3/client/democlient.ts 127.0.0.1 4433
+> node ./out/http/http3/client/democlient.js 127.0.0.1 4433
 
 <br/>
 注意：「node」コマンドは、このリポジトリにあるNodeJSのカスタムバージョンを使用しています：https://github.com/rmarx/node/tree/add_quicker_support-draft-18
@@ -29,11 +29,19 @@ IETF QUIC と HTTP/3 プロトコルの NodeJS/TypeScript での実装(https://g
 
 > ./build_images.sh $TAG
 
+### Docker コンテナ内に入る
+
+> docker container exec -it {container id} bash
+
 ### サーバーの起動
 
 > cd ./scripts/server_config/control
 
 > ./start_server.sh 0.0.0.0
+
+### クライアントの起動
+
+> node ./out/http/http3/client/democlient.js 127.0.0.1 4433
 
 ### (ログの確認)
 
