@@ -25,8 +25,8 @@ const schemeName = undefined;
 const resourceList = undefined;
 let host = process.argv[2] || "0.0.0.0";
 let port = parseInt(process.argv[3]) || 4433;
-let key  = "../../../../../keys/selfsigned_default.key";
-let cert = "../../../../../keys/selfsigned_default.crt";
+let key  = "../../../../keys/selfsigned_default.key";
+let cert = "../../../../keys/selfsigned_default.crt";
 
 if (isNaN(Number(port))) {
     console.log("port must be a number: node ./main.js 127.0.0.1 4433 ca.key ca.cert");
