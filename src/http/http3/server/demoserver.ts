@@ -24,7 +24,7 @@ import { Http3RequestMetadata } from "../client/http3.requestmetadata";
 const schemeName = undefined;
 const resourceList = undefined;
 let host = "0.0.0.0";
-let port = parseInt(process.argv[3]) || 4433;
+let port = parseInt(process.argv[3]) || 4444;
 let key  = "../../../../keys/selfsigned_default.key";
 let cert = "../../../../keys/selfsigned_default.crt";
 
