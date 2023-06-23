@@ -37,7 +37,7 @@ Constants.LOG_FILE_NAME = "server.log";
 
 VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
 
-let server: Http3Server = new Http3Server(resolve(__dirname + "/" + key), resolve(__dirname + "/" + cert), "rr", resourceList);
+let server: Http3Server = new Http3Server(resolve("/quicker/out/http/http3/server/" + key), resolve("/quicker/out/http/http3/server/" + cert), "rr", resourceList);
 server.listen(port, host);
 
 console.log("HTTP/3 server listening on port "+ host +":"+ port +", log level " + Constants.LOG_LEVEL);
