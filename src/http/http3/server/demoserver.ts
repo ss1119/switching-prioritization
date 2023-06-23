@@ -23,7 +23,7 @@ import { Http3RequestMetadata } from "../client/http3.requestmetadata";
 
 const schemeName = undefined;
 const resourceList = undefined;
-let host = process.argv[2] || "0.0.0.0";
+let host = "0.0.0.0";
 let port = parseInt(process.argv[3]) || 4433;
 let key  = "../../../../keys/selfsigned_default.key";
 let cert = "../../../../keys/selfsigned_default.crt";
@@ -36,7 +36,6 @@ if (isNaN(Number(port))) {
 Constants.LOG_FILE_NAME = "server.log";
 
 VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
-VerboseLogging.info(__dirname);
 
 let server: Http3Server = new Http3Server(resolve(__dirname + "/" + key), resolve(__dirname + "/" + cert), "rr", resourceList);
 server.listen(port, host);
