@@ -59,10 +59,12 @@ export class Http3Client extends EventEmitter {
 
         this.onNewStream = this.onNewStream.bind(this);
         this.quickerClient = Client.connect(hostname, port);
-        this.prioritiser = new Http3FIFOScheme();
+        console.log("Done: 1");
+        this.prioritiser = new Http3RoundRobinScheme();
         this.http3FrameParser = new Http3FrameParser();
 
         this.quickerClient.on(QuickerEvent.CLIENT_CONNECTED, () => {
+            console.log("Done: 2");
             this.logger = this.quickerClient.getConnection().getQlogger();
             this.prioritiser.setLogger(this.logger);
 
@@ -70,6 +72,7 @@ export class Http3Client extends EventEmitter {
             const controlStream: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
             this.sendingControlStream = new Http3SendingControlStream(EndpointType.Client, controlStream, this.logger);
             this.logger.onHTTPStreamStateChanged(controlStream.getStreamId(), Http3StreamState.LOCALLY_OPENED, "CONTROL");
+            console.log("Done: 3");
 
             // Create encoder and decoder stream for QPack
             const clientQPackEncoder: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
@@ -80,6 +83,7 @@ export class Http3Client extends EventEmitter {
             this.clientQPackDecoder = new Http3QPackDecoder(clientQPackDecoder, this.logger);
             this.http3FrameParser.setEncoder(this.clientQPackEncoder);
             this.http3FrameParser.setDecoder(this.clientQPackDecoder);
+            console.log("Done: 4");
 
             // Send initial settings frame
             this.sendingControlStream.sendFrame(new Http3SettingsFrame([]));
@@ -92,6 +96,7 @@ export class Http3Client extends EventEmitter {
             }
 
             this.emit(Http3ClientEvent.CLIENT_CONNECTED);
+            console.log("Done: 5");
 
             // Schedule 1 chunk of 1000 bytes every 30ms
             // TODO tweak numbers
@@ -102,6 +107,7 @@ export class Http3Client extends EventEmitter {
         });
 
         this.quickerClient.on(QuickerEvent.NEW_STREAM, this.onNewStream);
+        console.log("Done: 6");
     }
 
     private async onNewStream(quicStream: QuicStream) {
