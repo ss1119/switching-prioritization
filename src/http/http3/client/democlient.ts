@@ -42,6 +42,7 @@ const client: Http3Client = new Http3Client(host, port);
 client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
   // Default behaviour:
   // Request file and scan for related resources if HTML or JS
+  console.log("console: 6");
   if (lookupTable === undefined) {
     const resourceParser: Http3ResourceParser = new Http3ResourceParser();
     resourceParser.on(
@@ -55,6 +56,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
         }
       }
     );
+    console.log("console: 7");
 
     client.on(
       Http3ClientEvent.RESPONSE_RECEIVED,
@@ -108,6 +110,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
         }
       }
     );
+    console.log("console: 8");
 
     ++startedRequestCount;
     client.get("/index_with_subresources.html", authority, 16);
