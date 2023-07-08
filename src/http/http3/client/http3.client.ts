@@ -76,14 +76,21 @@ export class Http3Client extends EventEmitter {
 
             // Create encoder and decoder stream for QPack
             const clientQPackEncoder: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
-            this.logger.onHTTPStreamStateChanged(clientQPackEncoder.getStreamId(), Http3StreamState.LOCALLY_OPENED, "QPACK_ENCODE");
-            const clientQPackDecoder: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
-            this.logger.onHTTPStreamStateChanged(clientQPackDecoder.getStreamId(), Http3StreamState.LOCALLY_OPENED, "QPACK_DECODE");
-            this.clientQPackEncoder = new Http3QPackEncoder(clientQPackEncoder, false, this.logger);
-            this.clientQPackDecoder = new Http3QPackDecoder(clientQPackDecoder, this.logger);
-            this.http3FrameParser.setEncoder(this.clientQPackEncoder);
-            this.http3FrameParser.setDecoder(this.clientQPackDecoder);
             console.log("console: 5");
+            this.logger.onHTTPStreamStateChanged(clientQPackEncoder.getStreamId(), Http3StreamState.LOCALLY_OPENED, "QPACK_ENCODE");
+            console.log("console: 6");
+            const clientQPackDecoder: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
+            console.log("console: 7");
+            this.logger.onHTTPStreamStateChanged(clientQPackDecoder.getStreamId(), Http3StreamState.LOCALLY_OPENED, "QPACK_DECODE");
+            console.log("console: 8");
+            this.clientQPackEncoder = new Http3QPackEncoder(clientQPackEncoder, false, this.logger);
+            console.log("console: 9");
+            this.clientQPackDecoder = new Http3QPackDecoder(clientQPackDecoder, this.logger);
+            console.log("console: 10");
+            this.http3FrameParser.setEncoder(this.clientQPackEncoder);
+            console.log("console: 11");
+            this.http3FrameParser.setDecoder(this.clientQPackDecoder);
+            console.log("console: 12");
 
             // Send initial settings frame
             this.sendingControlStream.sendFrame(new Http3SettingsFrame([]));
