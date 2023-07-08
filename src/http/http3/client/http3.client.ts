@@ -86,11 +86,8 @@ export class Http3Client extends EventEmitter {
             this.clientQPackEncoder = new Http3QPackEncoder(clientQPackEncoder, false, this.logger);
             console.log("console: 9");
             this.clientQPackDecoder = new Http3QPackDecoder(clientQPackDecoder, this.logger);
-            console.log("console: 10");
             this.http3FrameParser.setEncoder(this.clientQPackEncoder);
-            console.log("console: 11");
             this.http3FrameParser.setDecoder(this.clientQPackDecoder);
-            console.log("console: 12");
 
             // Send initial settings frame
             this.sendingControlStream.sendFrame(new Http3SettingsFrame([]));
