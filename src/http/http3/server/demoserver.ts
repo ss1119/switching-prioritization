@@ -48,6 +48,7 @@ server.get(`/script.js`, getJS);
 server.get(`/image.jpg`, getImage);
 server.get(`/QUIC.png`, getQUICImage);
 server.get(`/QUIC_lowres.png`, getQUICImageLowRes);
+server.get(`/index_with_subresources.html`, getIndexWithSubresources);
 
 async function getRoot(req: Http3Request, res: Http3Response) {
     res.sendFile("/");
@@ -67,4 +68,8 @@ async function getQUICImage(req: Http3Request, res: Http3Response) {
 
 async function getQUICImageLowRes(req: Http3Request, res: Http3Response) {
     res.sendFile("/QUIC_lowres.png");
+}
+
+async function getIndexWithSubresources(req: Http3Request, res: Http3Response) {
+    res.sendFile("/index_with_subresources.html");
 }
