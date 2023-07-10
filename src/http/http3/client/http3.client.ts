@@ -59,12 +59,10 @@ export class Http3Client extends EventEmitter {
 
         this.onNewStream = this.onNewStream.bind(this);
         this.quickerClient = Client.connect(hostname, port);
-        console.log("console: 1");
         this.prioritiser = new Http3RoundRobinScheme();
         this.http3FrameParser = new Http3FrameParser();
 
         this.quickerClient.on(QuickerEvent.CLIENT_CONNECTED, () => {
-            console.log("console: 3");
             this.logger = this.quickerClient.getConnection().getQlogger();
             this.prioritiser.setLogger(this.logger);
 
@@ -72,19 +70,13 @@ export class Http3Client extends EventEmitter {
             const controlStream: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
             this.sendingControlStream = new Http3SendingControlStream(EndpointType.Client, controlStream, this.logger);
             this.logger.onHTTPStreamStateChanged(controlStream.getStreamId(), Http3StreamState.LOCALLY_OPENED, "CONTROL");
-            console.log("console: 4");
 
             // Create encoder and decoder stream for QPack
             const clientQPackEncoder: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
-            console.log("console: 5");
             this.logger.onHTTPStreamStateChanged(clientQPackEncoder.getStreamId(), Http3StreamState.LOCALLY_OPENED, "QPACK_ENCODE");
-            console.log("console: 6");
             const clientQPackDecoder: QuicStream = this.quickerClient.createStream(StreamType.ClientUni);
-            console.log("console: 7");
             this.logger.onHTTPStreamStateChanged(clientQPackDecoder.getStreamId(), Http3StreamState.LOCALLY_OPENED, "QPACK_DECODE");
-            console.log("console: 8");
             this.clientQPackEncoder = new Http3QPackEncoder(clientQPackEncoder, false, this.logger);
-            console.log("console: 9");
             this.clientQPackDecoder = new Http3QPackDecoder(clientQPackDecoder, this.logger);
             this.http3FrameParser.setEncoder(this.clientQPackEncoder);
             this.http3FrameParser.setDecoder(this.clientQPackDecoder);
@@ -110,7 +102,6 @@ export class Http3Client extends EventEmitter {
         });
 
         this.quickerClient.on(QuickerEvent.NEW_STREAM, this.onNewStream);
-        console.log("console: 2");
     }
 
     private async onNewStream(quicStream: QuicStream) {
