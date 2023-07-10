@@ -114,21 +114,6 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
     ++startedRequestCount;
     client.get("/index_with_subresources.html", authority, 16);
     console.log("console: send get request");
-
-    VerboseLogging.info(
-      "All requests are fully done, ending this test run " +
-        finishedRequestCount +
-        " === " +
-        startedRequestCount
-    );
-    client.DEBUGgetQUICClient()!.close("'Well, I'm back,' he said.");
-    client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
-
-    setTimeout(() => {
-      VerboseLogging.error("Exiting process with code 66");
-      console.log("Exiting process with code 66");
-      process.exit(66);
-    }, 500);
   }
   // using the hardcoded lookup table for synthetic testing
   else {
