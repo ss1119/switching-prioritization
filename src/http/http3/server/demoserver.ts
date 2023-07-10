@@ -48,29 +48,29 @@ server.get(`/script.js`, getJS);
 server.get(`/image.jpg`, getImage);
 server.get(`/QUIC.png`, getQUICImage);
 server.get(`/QUIC_lowres.png`, getQUICImageLowRes);
-server.get(`/index_with_subresources.html`, getIndexWithSubresources);
+server.get("/index_with_subresources.html", getIndexWithSubresources);
 
 async function getRoot(req: Http3Request, res: Http3Response) {
-    await res.sendFile("/");
+    res.sendFile("/");
 }
 
 async function getJS(req: Http3Request, res: Http3Response) {
-    await res.sendFile("/script.js");
+    res.sendFile("/script.js");
 }
 
 async function getImage(req: Http3Request, res: Http3Response) {
-    await res.sendFile("/image.jpg");
+    res.sendFile("/image.jpg");
 }
 
 async function getQUICImage(req: Http3Request, res: Http3Response) {
-    await res.sendFile("/QUIC.png");
+    res.sendFile("/QUIC.png");
 }
 
 async function getQUICImageLowRes(req: Http3Request, res: Http3Response) {
-    await res.sendFile("/QUIC_lowres.png");
+    res.sendFile("/QUIC_lowres.png");
 }
 
 async function getIndexWithSubresources(req: Http3Request, res: Http3Response) {
     console.log("get request");
-    await res.sendFile("/index_with_subresources.html");
+    res.sendFile("/index_with_subresources.html");
 }

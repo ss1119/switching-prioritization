@@ -288,6 +288,7 @@ export class Http3Client extends EventEmitter {
             }
 
             stream.removeAllListeners();
+            console.log("stream.on(QuickerEvent.STREAM_END)")
         });
 
         return stream.getStreamId();
