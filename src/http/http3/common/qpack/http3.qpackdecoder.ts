@@ -20,11 +20,8 @@ export class Http3QPackDecoder {
         this.decoderStream = decoderStream;
         this.logger = logger;
 
-        console.log("console: 10");
         this.decoderStream.write(VLIE.encode(Http3UniStreamType.DECODER));
-        console.log("console: 11");
         this.decoderStream.getConnection().sendPackets(); // we force trigger sending here because it's not yet done anywhere else. FIXME: This should be moved into stream prioritization scheduler later
-        console.log("console: 12");
 
         this.decoderID = createDecoder({
             dyn_table_size: dynTableSize,
