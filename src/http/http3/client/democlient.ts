@@ -27,7 +27,7 @@ import { start } from "repl";
 // let version = process.argv[7] || Constants.getActiveVersion(); // pass "deadbeef" to force version negotiation
 
 let host = "127.0.0.1";
-let port = parseInt(process.argv[3]) || 4433;
+let port = parseInt(process.argv[3]) || 4434;
 const authority: string = host + ":" + port;
 let version = process.argv[4] || Constants.getActiveVersion(); // pass "deadbeef" to force version negotiation
 
@@ -114,6 +114,21 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
     ++startedRequestCount;
     client.get("/index_with_subresources.html", authority, 16);
     console.log("console: send get request");
+
+    VerboseLogging.info(
+      "All requests are fully done, ending this test run " +
+        finishedRequestCount +
+        " === " +
+        startedRequestCount
+    );
+    client.DEBUGgetQUICClient()!.close("'Well, I'm back,' he said.");
+    client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
+
+    setTimeout(() => {
+      VerboseLogging.error("Exiting process with code 66");
+      console.log("Exiting process with code 66");
+      process.exit(66);
+    }, 500);
   }
   // using the hardcoded lookup table for synthetic testing
   else {
