@@ -71,6 +71,5 @@ async function getQUICImageLowRes(req: Http3Request, res: Http3Response) {
 }
 
 async function getIndexWithSubresources(req: Http3Request, res: Http3Response) {
-    console.log("get request")
     res.sendFile("/index_with_subresources.html");
 }

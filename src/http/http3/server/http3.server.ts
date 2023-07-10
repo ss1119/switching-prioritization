@@ -315,6 +315,8 @@ export class Http3Server {
     }
 
     private onNewStream(quicStream: QuicStream) {
+        console.log("on new stream")
+
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
@@ -444,6 +446,8 @@ export class Http3Server {
      * An Http/3 request is derived from this buffer and will be passed to user functions for the path specified in the request
      */
     private handleRequest(quicStream: QuicStream, bufferedFrames: Http3BaseFrame[]) {
+        console.log("get request")
+
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let state: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
