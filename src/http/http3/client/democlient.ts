@@ -26,7 +26,7 @@ import { start } from "repl";
 // const authority: string = host + ":" + port
 // let version = process.argv[7] || Constants.getActiveVersion(); // pass "deadbeef" to force version negotiation
 
-let host = "127.0.0.1";
+let host = "0.0.0.0";
 let port = parseInt(process.argv[3]) || 4444;
 const authority: string = host + ":" + port;
 let version = process.argv[4] || Constants.getActiveVersion(); // pass "deadbeef" to force version negotiation
