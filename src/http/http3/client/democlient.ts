@@ -112,8 +112,9 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
     );
 
     ++startedRequestCount;
-    // client.get("/index_with_subresources.html", authority, 16);
-    // client.get("/", authority, 16);
+    console.log("console: before send get request");
+    client.get("/index_with_subresources.html", authority, 16);
+    console.log("console: send get request");
   }
   // using the hardcoded lookup table for synthetic testing
   else {
