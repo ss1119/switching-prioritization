@@ -62,12 +62,14 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
             // TODO implement appropriate error
             throw new Error("Can not add new data to request node if it has already been marked as finished");
         }
+        console.log("console: newData="+newData)
         if (newData.byteLength > 0) {
             this.bufferedData = Buffer.concat([this.bufferedData, newData]);
             const parent: Http3PrioritisedElementNode | null = this.getParent();
             if (parent !== null) {
                 parent.activateChild(this);
             }
+            console.log("console: newData.byteLength > 0")
         }
         this.allDataBuffered = done;
     }
