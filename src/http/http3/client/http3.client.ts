@@ -266,6 +266,7 @@ export class Http3Client extends EventEmitter {
             }
         });
         stream.on(QuickerEvent.STREAM_END, () => {
+            console.log("console: stream.on(QuickerEvent.STREAM_END)")
             if (this.logger !== undefined) {
                 this.logger.onHTTPStreamStateChanged(stream.getStreamId(), Http3StreamState.CLOSED, "FIN");
             }
@@ -288,7 +289,6 @@ export class Http3Client extends EventEmitter {
             }
 
             stream.removeAllListeners();
-            console.log("stream.on(QuickerEvent.STREAM_END)")
         });
 
         return stream.getStreamId();
