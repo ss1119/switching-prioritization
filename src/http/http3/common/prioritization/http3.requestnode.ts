@@ -30,6 +30,7 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
                 this.stream.end(sendBuffer);
             } else {
                 this.stream.write(sendBuffer);
+                console.log("console: this.stream.write(sendBuffer)")
             }
             this.stream.getConnection().sendPackets(); // Force sending packets
             this.bytesSent = sendBuffer.byteLength;

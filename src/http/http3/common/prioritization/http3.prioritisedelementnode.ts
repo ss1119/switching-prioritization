@@ -28,6 +28,7 @@ export class Http3PrioritisedElementNode extends EventEmitter {
 
     // Do one (recursive) pass starting from this node
     public schedule() {
+        console.log("console: http3.prioritisedelementnode.suchedule")
         const child: Http3PrioritisedElementNode | undefined = this.activeChildrenPQueue.pop();
         if (child !== undefined) {
             this.lastPseudoTime = child.pseudoTime;

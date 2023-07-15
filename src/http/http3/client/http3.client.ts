@@ -59,7 +59,7 @@ export class Http3Client extends EventEmitter {
 
         this.onNewStream = this.onNewStream.bind(this);
         this.quickerClient = Client.connect(hostname, port);
-        this.prioritiser = new Http3RoundRobinScheme();
+        this.prioritiser = new Http3FIFOScheme();
         this.http3FrameParser = new Http3FrameParser();
 
         this.quickerClient.on(QuickerEvent.CLIENT_CONNECTED, () => {
