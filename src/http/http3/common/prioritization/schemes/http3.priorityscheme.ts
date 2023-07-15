@@ -31,7 +31,6 @@ export abstract class Http3PriorityScheme {
     public abstract handlePriorityFrame(priorityFrame: Http3PriorityFrame, currentStreamID: Bignum): void;
 
     public addData(streamID: Bignum, buffer: Buffer) {
-        console.log("console: addData")
         this.dependencyTree.addData(streamID, buffer);
     }
 

@@ -97,6 +97,7 @@ export class Http3Client extends EventEmitter {
             // TODO tweak numbers
             // TODO Listen to congestion control events instead
             this.scheduleTimer = setInterval(() => {
+                console.log("this.prioritiser.schedule()")
                 this.prioritiser.schedule();
             }, 10);
         });

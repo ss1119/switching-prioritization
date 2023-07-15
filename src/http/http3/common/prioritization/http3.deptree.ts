@@ -474,7 +474,6 @@ export class Http3DependencyTree extends EventEmitter {
         const node: Http3RequestNode | undefined = this.requestStreams.get(streamID.toString());
         if (node !== undefined) {
             node.addData(buffer);
-            console.log("console: node.addData")
         }
     }
 
