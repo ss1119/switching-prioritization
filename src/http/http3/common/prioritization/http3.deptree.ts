@@ -485,7 +485,6 @@ export class Http3DependencyTree extends EventEmitter {
         const node: Http3RequestNode | undefined = this.requestStreams.get(requestStreamID.toString());
         if (node !== undefined) {
             node.finish();
-            console.log("console: node.finish")
         }
     }
 

@@ -84,6 +84,7 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
             this.stream.getConnection().sendPackets(); // Force sending packets FIXME QUICker cannot send empty frames yet
             this.stream.getConnection().getQlogger().onHTTPStreamStateChanged(this.stream.getStreamId(), Http3StreamState.MODIFIED, "HALF_CLOSED");
         }
+        console.log("console: this.allDataBuffered = true")
     }
     
     // Closes its stream and removes itself from the tree

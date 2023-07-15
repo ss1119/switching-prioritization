@@ -256,6 +256,7 @@ export class Http3Client extends EventEmitter {
         let bufferedData: Buffer = new Buffer(0);
 
         stream.on(QuickerEvent.STREAM_DATA_AVAILABLE, (data: Buffer) => {
+            console.log("console: stream.on(QuickerEvent.STREAM_DATA_AVAILABLE)")
             bufferedData = Buffer.concat([bufferedData, data]);
             if (this.logger !== undefined) {
                 this.logger.onHTTPDataChunk(

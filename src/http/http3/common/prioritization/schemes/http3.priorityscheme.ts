@@ -40,7 +40,6 @@ export abstract class Http3PriorityScheme {
 
     public finishStream(requestStreamID: Bignum) {
         this.dependencyTree.finishStream(requestStreamID);
-        console.log("console: finishStream")
     }
 
     public removeRequestStream(requestStreamID: Bignum) {
