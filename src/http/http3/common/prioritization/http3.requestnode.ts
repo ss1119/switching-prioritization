@@ -23,6 +23,7 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
     public schedule() {
         // TODO possibly set a threshold minimum amount of data so that it doesn't send, for example, a single byte
         // But make sure all buffers are emptied eventually
+        console.log("console: http3.requestnode schedule")
         if (this.bufferedData.byteLength > 0) {
             const sendBuffer: Buffer = this.popData(Http3RequestNode.CHUNK_SIZE);
             if (this.allDataBuffered === true && this.bufferedData.byteLength === 0) {
