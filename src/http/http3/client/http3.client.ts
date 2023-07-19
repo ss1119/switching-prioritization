@@ -232,28 +232,6 @@ export class Http3Client extends EventEmitter {
             this.logger.onHTTPFrame_Headers(req.getHeaderFrame(), "TX");
         }
 
-        this.prioritiser.addStream(stream);
-        let priorityFrame: Http3PriorityFrame | null;
-
-        if (metadata !== undefined) {
-            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), metadata);
-        } else {
-            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), {mimeType: Http3Response.extensionToMimetype(fileExtension, path)});
-        }
-
-        if (priorityFrame === null) {
-            // Use default behaviour if scheme was not able to create a frame
-            priorityFrame = new Http3PriorityFrame(PrioritizedElementType.CURRENT_STREAM, ElementDependencyType.ROOT);
-        }
-
-        if (this.logger !== undefined) {
-            this.logger.onHTTPFrame_Priority(priorityFrame, "TX");
-        }
-
-        this.prioritiser.addData(stream.getStreamId(), priorityFrame.toBuffer());
-        this.prioritiser.addData(stream.getStreamId(), req.toBuffer());
-        this.prioritiser.finishStream(stream.getStreamId());
-
         let bufferedData: Buffer = new Buffer(0);
 
         stream.on(QuickerEvent.STREAM_DATA_AVAILABLE, (data: Buffer) => {
@@ -292,6 +270,28 @@ export class Http3Client extends EventEmitter {
 
             stream.removeAllListeners();
         });
+
+        this.prioritiser.addStream(stream);
+        let priorityFrame: Http3PriorityFrame | null;
+
+        if (metadata !== undefined) {
+            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), metadata);
+        } else {
+            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), {mimeType: Http3Response.extensionToMimetype(fileExtension, path)});
+        }
+
+        if (priorityFrame === null) {
+            // Use default behaviour if scheme was not able to create a frame
+            priorityFrame = new Http3PriorityFrame(PrioritizedElementType.CURRENT_STREAM, ElementDependencyType.ROOT);
+        }
+
+        if (this.logger !== undefined) {
+            this.logger.onHTTPFrame_Priority(priorityFrame, "TX");
+        }
+
+        this.prioritiser.addData(stream.getStreamId(), priorityFrame.toBuffer());
+        this.prioritiser.addData(stream.getStreamId(), req.toBuffer());
+        this.prioritiser.finishStream(stream.getStreamId());
 
         return stream.getStreamId();
     }
