@@ -27,10 +27,10 @@ export class QuicStream extends EventEmitter{
                 this.emit(QuickerEvent.STREAM_DATA_AVAILABLE, data);
             }
         });
-        stream.on(StreamEvent.END, () => {
+        // stream.on(StreamEvent.END, () => {
             console.log("this.emit(QuickerEvent.STREAM_END)")
             this.emit(QuickerEvent.STREAM_END);
-        });
+        // });
     }
     
     public getStreamId():Bignum {
