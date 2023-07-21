@@ -26,6 +26,7 @@ import { VerboseLogging } from '../logging/verbose.logging';
 export class FrameParser {
 
     public parse(msg: Buffer, offset: number): BaseFrame[] {
+        console.log("console.log: parse")
         VerboseLogging.trace("FrameParser:parse : full decrypted hex of all frames together : " + msg.toString('hex'));
         
         var frames: BaseFrame[] = [];
