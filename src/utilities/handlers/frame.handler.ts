@@ -111,7 +111,8 @@ export class FrameHandler {
                 break;
         }
         if (frame.getType() >= FrameType.STREAM && frame.getType() <= FrameType.STREAM_MAX_NR) {
-            console.log("frame.getType() >= FrameType.STREAM && frame.getType() <= FrameType.STREAM_MAX_NR")
+            const isInstance = frame instanceof StreamFrame
+            console.log("frame instanceof StreamFrame" + isInstance)
             var streamFrame: StreamFrame = <StreamFrame>frame;
             this.handleStreamFrame(connection, streamFrame);
         }
