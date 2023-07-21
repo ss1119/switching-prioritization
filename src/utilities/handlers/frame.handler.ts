@@ -112,7 +112,7 @@ export class FrameHandler {
         }
         if (frame.getType() >= FrameType.STREAM && frame.getType() <= FrameType.STREAM_MAX_NR) {
             console.log("frame.getType() >= FrameType.STREAM && frame.getType() <= FrameType.STREAM_MAX_NR")
-            var streamFrame = <StreamFrame>frame;
+            var streamFrame: StreamFrame = <StreamFrame>frame;
             this.handleStreamFrame(connection, streamFrame);
         }
     }
