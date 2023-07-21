@@ -42,6 +42,7 @@ export class PacketHandler {
     }
 
     public handle(connection: Connection, packet: BasePacket, receivedTime: Time) {
+        console.log("handle(connection: Connection, packet: BasePacket, receivedTime: Time)")
         connection.getQlogger().onPacketRX(packet);
         PacketLogging.getInstance().logIncomingPacket(connection, packet);
 
@@ -175,6 +176,7 @@ export class PacketHandler {
     }
 
     private handleFrames(connection: Connection, packet: BaseEncryptedPacket): void {
+        console.log("1.handleFrames(connection: Connection, packet: BaseEncryptedPacket)")
         
         packet.getFrames().forEach((baseFrame: BaseFrame) => {
             // crypto frames explicitly belong to a certain encryption level, which is based on the type of packet they arrive in 

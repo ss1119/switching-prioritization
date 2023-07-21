@@ -40,6 +40,7 @@ export class FrameHandler {
     }
 
     public handle(connection: Connection, frame: BaseFrame) {
+        console.log("handle(connection: Connection, frame: BaseFrame)")
         switch (frame.getType()) {
             case FrameType.PADDING:
                 break;
