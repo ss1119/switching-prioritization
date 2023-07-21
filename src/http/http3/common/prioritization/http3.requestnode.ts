@@ -28,6 +28,7 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
             const sendBuffer: Buffer = this.popData(Http3RequestNode.CHUNK_SIZE);
             if (this.allDataBuffered === true && this.bufferedData.byteLength === 0) {
                 this.stream.end(sendBuffer);
+                console.log("console: this.stream.end(sendBuffer)")
             } else {
                 this.stream.write(sendBuffer);
                 console.log("console: this.stream.write(sendBuffer)")
