@@ -88,7 +88,6 @@ export class PacketParser {
         let decryptedPayload = connection.getAEAD().protected1RTTDecrypt(packet.header.getPacketNumber()!, components.headerBuffer, components.payloadBuffer, endpoint);
 
         let frames = this.frameParser.parse(decryptedPayload, 0);
-        console.log("frames: " + frames)
         // return {
         //     packet: new ShortHeaderPacket(headerOffset.header, frames),
         //     offset: headerOffset.offset

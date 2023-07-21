@@ -35,8 +35,8 @@ export enum FrameType {
     CRYPTO                  = 0x06,
     NEW_TOKEN               = 0x07,
 
-    STREAM                  = 0x10, // streams are between 0x10 and 0x17, check for stream with:  type >= FrameType.STREAM && type <= FrameType.STREAM_MAX
-    STREAM_MAX_NR           = 0x17, // not a real frame type, just used for easier reasoning on stream numbers (see line above)
+    STREAM                  = 0x08, // streams are between 0x10 and 0x17, check for stream with:  type >= FrameType.STREAM && type <= FrameType.STREAM_MAX
+    STREAM_MAX_NR           = 0x0f, // not a real frame type, just used for easier reasoning on stream numbers (see line above)
 
     MAX_DATA                = 0x10,
     MAX_STREAM_DATA         = 0x11,
