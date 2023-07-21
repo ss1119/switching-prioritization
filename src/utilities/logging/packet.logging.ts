@@ -271,7 +271,7 @@ export class PacketLogging {
                 log += this.logCryptoFrame(cryptoFrame, color);
                 break;
         }
-        if (baseFrame.getType() >= FrameType.STREAM && baseFrame.getType() <= FrameType.STREAM_MAX_NR) {
+        if (!(baseFrame.getType() >= FrameType.STREAM && baseFrame.getType() <= FrameType.STREAM_MAX_NR)) {
             var streamFrame: StreamFrame = <StreamFrame>baseFrame;
             log += this.logStreamFrame(streamFrame, color);
         }
