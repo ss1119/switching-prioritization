@@ -40,7 +40,6 @@ export class FrameHandler {
     }
 
     public handle(connection: Connection, frame: BaseFrame) {
-        console.log("handle(connection: Connection, frame: BaseFrame)")
         switch (frame.getType()) {
             case FrameType.PADDING:
                 break;
@@ -111,6 +110,9 @@ export class FrameHandler {
                 this.handleCryptoFrame(connection, cryptoFrame);
                 break;
         }
+        console.log("frame.getType():" + frame.getType())
+        console.log("FrameType.STREAM:" + FrameType.STREAM)
+        console.log("FrameType.STREAM_MAX_NR:" + FrameType.STREAM_MAX_NR)
         if (frame.getType() >= FrameType.STREAM && frame.getType() <= FrameType.STREAM_MAX_NR) {
             console.log("frame.getType() >= FrameType.STREAM && frame.getType() <= FrameType.STREAM_MAX_NR")
             var streamFrame = <StreamFrame>frame;
