@@ -177,6 +177,8 @@ export class PacketHandler {
     private handleFrames(connection: Connection, packet: BaseEncryptedPacket): void {
         
         packet.getFrames().forEach((baseFrame: BaseFrame) => {
+            const isInstance = baseFrame instanceof BaseFrame
+            console.log("baseFrame instanceof BaseFrame" + isInstance)
             // crypto frames explicitly belong to a certain encryption level, which is based on the type of packet they arrive in 
             if( baseFrame.getType() == FrameType.CRYPTO || baseFrame.getType() == FrameType.ACK ){
                 let cryptoLevel:EncryptionLevel = EncryptionLevel.INITIAL;
