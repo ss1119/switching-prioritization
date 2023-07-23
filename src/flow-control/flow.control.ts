@@ -383,11 +383,10 @@ export class FlowControl {
         //    stream.resetData();
         //}
 
-        console.log("getOutgoing: " + stream.getOutgoingDataSize())
         console.log("stream.ableToSend" + stream.ableToSend())
         console.log("connection.ableToSend" + this.connection.ableToSend())
         while (stream.getOutgoingDataSize() > 0 && stream.ableToSend() && !this.connection.ableToSend()) {
-            console.log("console: while")
+            console.log("getOutgoing: " + stream.getOutgoingDataSize())
             let streamDataSize = maxPayloadSize.lessThan(stream.getOutgoingDataSize()) ? maxPayloadSize : new Bignum(stream.getOutgoingDataSize());
 
             // adhere to current connection-level and then stream-level flow control max-data limits
