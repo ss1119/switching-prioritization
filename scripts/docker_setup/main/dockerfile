@@ -47,7 +47,7 @@ RUN 				\
 RUN git clone --depth 1 -b main https://github.com/ss1119/switching-prioritization.git /quicker
 WORKDIR /quicker
 
-RUN npm install typescript -g && npm install && tsc -p ./ 
+RUN npm install typescript@3.0.1 -g && npm install && tsc -p ./ 
 # build lsqpack integration
 RUN /node/deps/npm/bin/node-gyp-bin/node-gyp configure && /node/deps/npm/bin/node-gyp-bin/node-gyp build && /node/deps/npm/bin/node-gyp-bin/node-gyp configure --debug && /node/deps/npm/bin/node-gyp-bin/node-gyp build --debug
 
