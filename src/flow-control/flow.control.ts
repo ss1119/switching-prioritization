@@ -289,6 +289,7 @@ export class FlowControl {
     // primarily: STREAM frames with data and flow control frames
     // ACK and CRYPTO etc. frames are done elsewhere 
     public getFrames(maxPayloadSize: Bignum): FlowControlFrames {
+        console.log("console: getFrames")
         var streamFrames = new Array<StreamFrame>();
         var flowControlFrames = new Array<BaseFrame>();
         var handshakeFrames = new Array<CryptoFrame>(); // TODO: this cannot be returned from here, so don't indicate that it could 
@@ -309,6 +310,7 @@ export class FlowControl {
 
         // per-stream
         this.connection.getStreamManager().getStreams().forEach((stream: Stream) => {
+            console.log("this.connection.getStreamManager")
             let dataBlocked = connectionLevelBlocked;
 
             // 2. 
@@ -324,6 +326,7 @@ export class FlowControl {
             // 3.
             // TODO: check if we're allowed to send these messages if the conn-level flow control maximum is exceeded
             if (this.isRemoteStreamIdBlocked(stream)) {
+                console.log("this.isRemoteStreamIdBlocked")
                 if (!uniAdded && Stream.isUniStreamId(stream.getStreamID())) {
                     // TODO: shouldn't we set a state boolean somewhere that we've requested an update? see stream.setBlockedSent above for something similar
                     var frame = this.addRemoteStreamIdBlocked(stream); 
@@ -340,8 +343,10 @@ export class FlowControl {
             }
 
             if( !dataBlocked ){
+                console.log("!dataBlocked")
                 // no type of flow control is stopping us from sending, so let's get the data frames! 
                 if (stream.getOutgoingDataSize() !== 0) {
+                    console.log("getOutgoingDataSiza()")
                     streamFrames = streamFrames.concat(this.getStreamFrames(stream, maxPayloadSize));
                 }
             }
@@ -384,6 +389,7 @@ export class FlowControl {
         //}
 
         while (stream.getOutgoingDataSize() > 0 && stream.ableToSend() && this.connection.ableToSend()) {
+            console.log("console: while")
             let streamDataSize = maxPayloadSize.lessThan(stream.getOutgoingDataSize()) ? maxPayloadSize : new Bignum(stream.getOutgoingDataSize());
 
             // adhere to current connection-level and then stream-level flow control max-data limits
