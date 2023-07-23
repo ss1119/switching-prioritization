@@ -3,7 +3,7 @@
 # we only pull once, not every time the server is restarted
 # this is to make sure we keep the running code stable for reproducibility 
 cd /quicker 
-git pull origin draft-20
+git pull origin main
 tsc -p ./
 
 cd /
