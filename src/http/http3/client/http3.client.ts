@@ -97,6 +97,7 @@ export class Http3Client extends EventEmitter {
             // TODO tweak numbers
             // TODO Listen to congestion control events instead
             this.scheduleTimer = setInterval(() => {
+                console.log("this.prioritiser.schedule()")
                 this.prioritiser.schedule();
             }, 10);
         });
@@ -231,31 +232,10 @@ export class Http3Client extends EventEmitter {
             this.logger.onHTTPFrame_Headers(req.getHeaderFrame(), "TX");
         }
 
-        this.prioritiser.addStream(stream);
-        let priorityFrame: Http3PriorityFrame | null;
-
-        if (metadata !== undefined) {
-            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), metadata);
-        } else {
-            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), {mimeType: Http3Response.extensionToMimetype(fileExtension, path)});
-        }
-
-        if (priorityFrame === null) {
-            // Use default behaviour if scheme was not able to create a frame
-            priorityFrame = new Http3PriorityFrame(PrioritizedElementType.CURRENT_STREAM, ElementDependencyType.ROOT);
-        }
-
-        if (this.logger !== undefined) {
-            this.logger.onHTTPFrame_Priority(priorityFrame, "TX");
-        }
-
-        this.prioritiser.addData(stream.getStreamId(), priorityFrame.toBuffer());
-        this.prioritiser.addData(stream.getStreamId(), req.toBuffer());
-        this.prioritiser.finishStream(stream.getStreamId());
-
         let bufferedData: Buffer = new Buffer(0);
 
         stream.on(QuickerEvent.STREAM_DATA_AVAILABLE, (data: Buffer) => {
+            console.log("console: stream.on(QuickerEvent.STREAM_DATA_AVAILABLE)")
             bufferedData = Buffer.concat([bufferedData, data]);
             if (this.logger !== undefined) {
                 this.logger.onHTTPDataChunk(
@@ -266,6 +246,7 @@ export class Http3Client extends EventEmitter {
             }
         });
         stream.on(QuickerEvent.STREAM_END, () => {
+            console.log("console: stream.on(QuickerEvent.STREAM_END)")
             if (this.logger !== undefined) {
                 this.logger.onHTTPStreamStateChanged(stream.getStreamId(), Http3StreamState.CLOSED, "FIN");
             }
@@ -289,6 +270,28 @@ export class Http3Client extends EventEmitter {
 
             stream.removeAllListeners();
         });
+
+        this.prioritiser.addStream(stream);
+        let priorityFrame: Http3PriorityFrame | null;
+
+        if (metadata !== undefined) {
+            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), metadata);
+        } else {
+            priorityFrame = this.prioritiser.applyScheme(stream.getStreamId(), {mimeType: Http3Response.extensionToMimetype(fileExtension, path)});
+        }
+
+        if (priorityFrame === null) {
+            // Use default behaviour if scheme was not able to create a frame
+            priorityFrame = new Http3PriorityFrame(PrioritizedElementType.CURRENT_STREAM, ElementDependencyType.ROOT);
+        }
+
+        if (this.logger !== undefined) {
+            this.logger.onHTTPFrame_Priority(priorityFrame, "TX");
+        }
+
+        this.prioritiser.addData(stream.getStreamId(), priorityFrame.toBuffer());
+        this.prioritiser.addData(stream.getStreamId(), req.toBuffer());
+        this.prioritiser.finishStream(stream.getStreamId());
 
         return stream.getStreamId();
     }

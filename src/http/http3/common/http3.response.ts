@@ -22,9 +22,9 @@ export class Http3Response {
     public constructor(headers: Http3Header[], requestStreamID: Bignum, encoder: Http3QPackEncoder, decoder: Http3QPackDecoder) {
         this.headerFrame = new Http3HeaderFrame(headers, requestStreamID, encoder);
         if (Constants.EXPOSED_SERVER_DIR === undefined) {
-            this.publicDir = "/../../../../public";
+            this.publicDir = "./../../../../public";
         } else {
-            this.publicDir = "/../../../../public/" + Constants.EXPOSED_SERVER_DIR;
+            this.publicDir = "./../../../../public/" + Constants.EXPOSED_SERVER_DIR;
         }
     }
 

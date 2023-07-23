@@ -313,7 +313,7 @@ export class FlowControl {
 
             // 2. 
             // TODO: check if we're allowed to send these messages if the conn-level flow control maximum is exceeded
-            if ( !stream.isReceiveOnly() && stream.ableToSend()) { 
+            if ( !stream.isReceiveOnly() && !stream.ableToSend()) { 
                 if( !stream.getBlockedSent() ){ // keep track of if we've already sent a STREAM_BLOCKED frame for this stream
                     flowControlFrames.push(FrameFactory.createStreamBlockedFrame(stream.getStreamID(), stream.getRemoteOffset()));
                     stream.setBlockedSent(true); // is un-set when we receive MAX_STREAM_DATA frame from peer 
@@ -383,7 +383,10 @@ export class FlowControl {
         //    stream.resetData();
         //}
 
-        while (stream.getOutgoingDataSize() > 0 && !stream.ableToSend() && !this.connection.ableToSend()) {
+        console.log("stream.ableToSend" + stream.ableToSend())
+        console.log("connection.ableToSend" + this.connection.ableToSend())
+        while (stream.getOutgoingDataSize() > 0 && stream.ableToSend() && !this.connection.ableToSend()) {
+            console.log("getOutgoing: " + stream.getOutgoingDataSize())
             let streamDataSize = maxPayloadSize.lessThan(stream.getOutgoingDataSize()) ? maxPayloadSize : new Bignum(stream.getOutgoingDataSize());
 
             // adhere to current connection-level and then stream-level flow control max-data limits

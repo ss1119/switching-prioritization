@@ -466,6 +466,7 @@ export class Http3DependencyTree extends EventEmitter {
             node.finish();
             node.removeSelf();
             this.requestStreams.delete(requestStreamID.toString());
+            console.log("console: node.finish")
         }
     }
 

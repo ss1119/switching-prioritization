@@ -8,8 +8,6 @@ fi
 
 TAG=$1
 
-cd /home/speeder/quicker/system/docker_setup
-sudo docker build -t quicker/quicker:$TAG main/ # add  --no-cache in between to force full rebuild 
+cd ../../docker_setup
+sudo docker build --no-cache -t quicker/quicker:$TAG main/ # add  --no-cache in between to force full rebuild 
 sudo docker tag quicker/quicker:$TAG quicker/quicker:latest
-
-

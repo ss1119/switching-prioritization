@@ -23,7 +23,6 @@ export class Http3QPackDecoder {
         this.decoderStream.write(VLIE.encode(Http3UniStreamType.DECODER));
         this.decoderStream.getConnection().sendPackets(); // we force trigger sending here because it's not yet done anywhere else. FIXME: This should be moved into stream prioritization scheduler later
 
-
         this.decoderID = createDecoder({
             dyn_table_size: dynTableSize,
             max_risked_streams: maxRiskedStreams,

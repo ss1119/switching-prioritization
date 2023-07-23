@@ -20,6 +20,7 @@ export class QuicStream extends EventEmitter{
 
     private setupEvents(stream: Stream): void {
         stream.on(StreamEvent.DATA, (data: Buffer) => {
+            console.log("this.emit(QuickerEvent.STREAM_DATA_AVAILABLE, data);")
             if (this.encoding !== undefined) {
                 this.emit(QuickerEvent.STREAM_DATA_AVAILABLE, data.toString(this.encoding))
             } else {
@@ -27,6 +28,7 @@ export class QuicStream extends EventEmitter{
             }
         });
         stream.on(StreamEvent.END, () => {
+            console.log("this.emit(QuickerEvent.STREAM_END)")
             this.emit(QuickerEvent.STREAM_END);
         });
     }

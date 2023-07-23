@@ -126,6 +126,7 @@ export class PacketHandler {
     }
 
     private handleInitialPacket(connection: Connection, initialPacket: InitialPacket): void {
+        console.log("handleInitialPacket")
         // TODO: compliance: if this is the second initial we get after a VNEG, we need to check it uses correct packet number 1 instead of 0
         // Note: if we properly deal with duplicate packet numbers, this should be an auto-fix though? 
         let longHeader = <LongHeader>initialPacket.getHeader();
@@ -145,6 +146,7 @@ export class PacketHandler {
 
     // only on the SERVER (client sends stateless retry packet)
     private handleRetryPacket(connection: Connection, retryPacket: RetryPacket): void {
+        console.log("handleRetryPacket")
         var longHeader = <LongHeader>retryPacket.getHeader();
         var connectionID = longHeader.getSrcConnectionID();
         if (connection.getEndpointType() === EndpointType.Client) {
@@ -163,14 +165,17 @@ export class PacketHandler {
     }
 
     private handleHandshakePacket(connection: Connection, handshakePacket: HandshakePacket): void {
+        console.log("handleHandshakePacket")
         this.handleFrames(connection, handshakePacket);
     }
 
     private handleProtected0RTTPacket(connection: Connection, protected0RTTPacket: Protected0RTTPacket): void {
+        console.log("handleProtected0RTTPacket")
         this.handleFrames(connection, protected0RTTPacket);
     }
 
     private handleProtected1RTTPacket(connection: Connection, shortHeaderPacket: ShortHeaderPacket): void {
+        console.log("handleProtected1RTTPacket")
         this.handleFrames(connection, shortHeaderPacket);
     }
 

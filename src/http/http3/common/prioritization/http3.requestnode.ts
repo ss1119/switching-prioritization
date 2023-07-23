@@ -23,12 +23,15 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
     public schedule() {
         // TODO possibly set a threshold minimum amount of data so that it doesn't send, for example, a single byte
         // But make sure all buffers are emptied eventually
+        console.log("console: http3.requestnode schedule")
         if (this.bufferedData.byteLength > 0) {
             const sendBuffer: Buffer = this.popData(Http3RequestNode.CHUNK_SIZE);
             if (this.allDataBuffered === true && this.bufferedData.byteLength === 0) {
                 this.stream.end(sendBuffer);
+                console.log("console: this.stream.end(sendBuffer)")
             } else {
                 this.stream.write(sendBuffer);
+                console.log("console: this.stream.write(sendBuffer)")
             }
             this.stream.getConnection().sendPackets(); // Force sending packets
             this.bytesSent = sendBuffer.byteLength;
@@ -79,10 +82,12 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
         this.allDataBuffered = true;
         if (this.bufferedData.byteLength === 0) {
             this.stream.end();
+            console.log("console: this.stream.end")
             this.removeSelf();
             this.stream.getConnection().sendPackets(); // Force sending packets FIXME QUICker cannot send empty frames yet
             this.stream.getConnection().getQlogger().onHTTPStreamStateChanged(this.stream.getStreamId(), Http3StreamState.MODIFIED, "HALF_CLOSED");
         }
+        console.log("console: this.allDataBuffered = true")
     }
     
     // Closes its stream and removes itself from the tree

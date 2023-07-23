@@ -315,6 +315,8 @@ export class Http3Server {
     }
 
     private onNewStream(quicStream: QuicStream) {
+        console.log("on new stream")
+
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
