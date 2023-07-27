@@ -28,7 +28,7 @@ let host = process.argv[2] || "0.0.0.0";
 let port = parseInt(process.argv[3]) || 4433;
 let key  = process.argv[4] || "../../../../../keys/selfsigned_default.key";
 let cert = process.argv[5] || "../../../../../keys/selfsigned_default.crt";
-const clientAddress = '127.0.0.0';  // クライアントのIPアドレスを指定
+const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
 const totalPackets = 10;            // 送信するICMPパケットの総数
 let packetLossRate;                 // パケットロス率
 let sentPackets = 0;                // 送信したパケット数
