@@ -6,7 +6,6 @@ import { Constants } from "../../../utilities/constants";
 import { VerboseLogging } from "../../../utilities/logging/verbose.logging";
 import { readFileSync } from "fs";
 import { Http3RequestMetadata } from "../client/http3.requestmetadata";
-import ping from 'ping';
 
 // node demoserver.js scheme_name qlog_file_name log_file_name exposed_public_subdir
 
@@ -28,13 +27,6 @@ let host = process.argv[2] || "0.0.0.0";
 let port = parseInt(process.argv[3]) || 4433;
 let key  = process.argv[4] || "../../../../../keys/selfsigned_default.key";
 let cert = process.argv[5] || "../../../../../keys/selfsigned_default.crt";
-const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
-const totalPackets = 10;            // 送信するICMPパケットの総数
-let packetLossRate;                 // パケットロス率
-let sentPackets = 0;                // 送信したパケット数
-let receivedPackets = 0;            // 受信したICMPパケットの数
-let totalLatency = 0;               // 通信遅延の合計
-let latency;                        // 通信遅延    
 
 if (isNaN(Number(port))) {
     console.log("port must be a number: node ./main.js 127.0.0.1 4433 ca.key ca.cert");
@@ -44,8 +36,6 @@ if (isNaN(Number(port))) {
 Constants.LOG_FILE_NAME = "server.log";
 
 VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
-
-pingClient();
 
 let server: Http3Server = new Http3Server(resolve(__dirname + key), resolve(__dirname + cert), "rr", resourceList);
 server.listen(port, host);
@@ -78,30 +68,3 @@ async function getQUICImage(req: Http3Request, res: Http3Response) {
 async function getQUICImageLowRes(req: Http3Request, res: Http3Response) {
     res.sendFile("/QUIC_lowres.png");
 }
-
-function pingClient() {
-    ping.promise.probe(clientAddress)
-      .then((result: any) => {
-        if (result.alive) {
-          console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
-          totalLatency += result.time;
-          receivedPackets++;
-          sentPackets++;
-        } else {
-          console.log(`クライアント ${clientAddress} に到達できませんでした。`);
-          sentPackets++;
-        }
-  
-        if (sentPackets !== totalPackets) {
-          setTimeout(pingClient, 1000); // 1秒ごとにクライアントにpingを送信
-        } else {
-          packetLossRate = ((totalPackets - receivedPackets) / totalPackets) * 100;
-          latency = totalLatency / totalPackets;
-          console.log(`通信遅延: ${latency}`);
-          console.log(`パケットロス率: ${packetLossRate.toFixed(2)}%`);
-        }
-      })
-      .catch((error: Error) => {
-        console.error('エラー:', error);
-      });
-  }

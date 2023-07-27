@@ -30,6 +30,7 @@ import { Constants } from "../../../utilities/constants";
 import { HttpHelper } from "../../http0.9/http.helper";
 import { QuicError } from "../../../utilities/errors/connection.error";
 import { ConnectionErrorCodes } from "../../../utilities/errors/quic.codes";
+import ping from 'ping';
 
 class ClientState {
     private logger: QlogWrapper;
@@ -158,6 +159,12 @@ export class ClientState09{
         return this.helper;
     }
 }
+
+let packetLossRate;                 // パケットロス率
+let sentPackets = 0;                // 送信したパケット数
+let receivedPackets = 0;            // 受信したICMPパケットの数
+let totalLatency = 0;               // 通信遅延の合計
+let latency;                        // 通信遅延    
 
 export class Http3Server {
     private readonly quickerServer: QuicServer;
@@ -315,6 +322,8 @@ export class Http3Server {
     }
 
     private onNewStream(quicStream: QuicStream) {
+        this.pingClient();
+        // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
@@ -537,5 +546,34 @@ export class Http3Server {
     private onQuicServerError(error: Error) {
         VerboseLogging.error("main:onError : " + error.message + " -- " + JSON.stringify(error));
         console.error(error.stack);
+    }
+
+    private pingClient() {
+        const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
+        const totalPackets = 10;            // 送信するICMPパケットの総数
+        ping.promise.probe(clientAddress)
+          .then((result: any) => {
+            if (result.alive) {
+              console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
+              totalLatency += result.time;
+              receivedPackets++;
+              sentPackets++;
+            } else {
+              console.log(`クライアント ${clientAddress} に到達できませんでした。`);
+              sentPackets++;
+            }
+      
+            if (sentPackets !== totalPackets) {
+              setTimeout(this.pingClient, 1000); // 1秒ごとにクライアントにpingを送信
+            } else {
+              packetLossRate = ((totalPackets - receivedPackets) / totalPackets) * 100;
+              latency = totalLatency / totalPackets;
+              console.log(`通信遅延: ${latency}`);
+              console.log(`パケットロス率: ${packetLossRate.toFixed(2)}%`);
+            }
+          })
+          .catch((error: Error) => {
+            console.error('エラー:', error);
+          });
     }
 }
