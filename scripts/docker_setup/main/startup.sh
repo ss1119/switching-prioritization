@@ -3,7 +3,7 @@
 # we only pull once, not every time the server is restarted
 # this is to make sure we keep the running code stable for reproducibility 
 cd /quicker 
-git pull origin main
+git pull origin feature/network
 tsc -p ./
 
 cd /
