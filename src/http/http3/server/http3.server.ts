@@ -160,12 +160,6 @@ export class ClientState09{
     }
 }
 
-let packetLossRate;                 // パケットロス率
-let sentPackets = 0;                // 送信したパケット数
-let receivedPackets = 0;            // 受信したICMPパケットの数
-let totalLatency = 0;               // 通信遅延の合計
-let latency;                        // 通信遅延    
-
 export class Http3Server {
     private readonly quickerServer: QuicServer;
     private prioritizationSchemeName?: string;
@@ -177,6 +171,13 @@ export class Http3Server {
     private connectionStates: Map<string, ClientState|ClientState09> = new Map<string, ClientState|ClientState09>();
 
     private resourceList?: {[path: string]: Http3RequestMetadata};
+
+    private isFirstConnection: boolean;         // クライアントとの最初のコネクションかどうか
+    private packetLossRate: number;             // パケットロス率
+    private sentPackets: number;                // 送信したパケット数
+    private receivedPackets: number;            // 受信したICMPパケットの数
+    private totalLatency: number;               // 通信遅延の合計
+    private latency: number;                    // 通信遅延    
 
     // Separate from connectionState as they are kept for 0RTT connections
     // private connectionSettings: Map<string, Http3Setting[]> = new Map<string, Http3Setting[]>();
@@ -199,6 +200,13 @@ export class Http3Server {
         }
         this.prioritizationSchemeName = prioritizationSchemeName;
         this.resourceList = resourceList;
+
+        this.isFirstConnection = true;
+        this.packetLossRate = 0;
+        this.sentPackets = 0;
+        this.receivedPackets = 0;
+        this.totalLatency = 0;
+        this.latency = 0;
 
         this.quickerServer.on(QuickerEvent.NEW_STREAM, this.onNewStream);
         this.quickerServer.on(QuickerEvent.CONNECTION_CLOSE, this.closeConnection);
@@ -322,7 +330,12 @@ export class Http3Server {
     }
 
     private onNewStream(quicStream: QuicStream) {
-        this.pingClient();
+        if (this.isFirstConnection) {
+            this.pingClient();
+            this.isFirstConnection = false;
+            console.log(`after:通信遅延: ${this.latency}`);
+            console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);   
+        }
         // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
@@ -554,26 +567,26 @@ export class Http3Server {
         await ping.promise.probe(clientAddress)
           .then((result: any) => {
             if (result.alive) {
-              console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
-              totalLatency += result.time;
-              receivedPackets++;
-              sentPackets++;
+                console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
+                this.totalLatency += result.time;
+                this.receivedPackets++;
+                this.sentPackets++;
             } else {
-              console.log(`クライアント ${clientAddress} に到達できませんでした。`);
-              sentPackets++;
+                console.log(`クライアント ${clientAddress} に到達できませんでした。`);
+                this.sentPackets++;
             }
       
-            if (sentPackets !== totalPackets) {
-              setTimeout(this.pingClient, 1000); // 1秒ごとにクライアントにpingを送信
+            if (this.sentPackets !== totalPackets) {
+                setTimeout(this.pingClient, 1000); // 1秒ごとにクライアントにpingを送信
             } else {
-              packetLossRate = ((totalPackets - receivedPackets) / totalPackets) * 100;
-              latency = totalLatency / totalPackets;
-              console.log(`通信遅延: ${latency}`);
-              console.log(`パケットロス率: ${packetLossRate.toFixed(2)}%`);
+                this.packetLossRate = ((totalPackets - this.receivedPackets) / totalPackets) * 100;
+                this.latency = this.totalLatency / totalPackets;
+                console.log(`通信遅延: ${this.latency}`);
+                console.log(`パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
             }
           })
           .catch((error: Error) => {
-            console.error('エラー:', error);
+                console.error('エラー:', error);
           });
     }
 }
