@@ -322,7 +322,9 @@ export class Http3Server {
     }
 
     private onNewStream(quicStream: QuicStream) {
+        console.log("before:this.pingClient();")    
         this.pingClient();
+        console.log("after:this.pingClient();")
         // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
@@ -549,6 +551,7 @@ export class Http3Server {
     }
 
     private pingClient() {
+        console.log("private pingClient")
         const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
         const totalPackets = 10;            // 送信するICMPパケットの総数
         ping.promise.probe(clientAddress)
