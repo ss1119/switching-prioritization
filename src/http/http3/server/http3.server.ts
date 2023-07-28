@@ -329,9 +329,9 @@ export class Http3Server {
         });
     }
 
-    private onNewStream(quicStream: QuicStream) {
+    private async onNewStream(quicStream: QuicStream) {
         if (this.isFirstConnection) {
-            this.pingClient().then(() => {
+            await this.pingClient().then(() => {
                 console.log(`after:通信遅延: ${this.latency}`);
                 console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
                 // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
@@ -578,7 +578,7 @@ export class Http3Server {
             }
       
             if (this.sentPackets !== totalPackets) {
-                setTimeout(() => this.pingClient(), 100); // 0.1秒ごとにクライアントにpingを送信
+                setTimeout(async() => await this.pingClient(), 100); // 0.1秒ごとにクライアントにpingを送信
             } else {
                 this.packetLossRate = ((totalPackets - this.receivedPackets) / totalPackets) * 100;
                 this.latency = this.totalLatency / totalPackets;
