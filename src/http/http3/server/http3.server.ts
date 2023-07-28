@@ -577,7 +577,7 @@ export class Http3Server {
             }
       
             if (this.sentPackets !== totalPackets) {
-                setTimeout(this.pingClient, 1000); // 1秒ごとにクライアントにpingを送信
+                setTimeout(() => this.pingClient, 100); // 0.1秒ごとにクライアントにpingを送信
             } else {
                 this.packetLossRate = ((totalPackets - this.receivedPackets) / totalPackets) * 100;
                 this.latency = this.totalLatency / totalPackets;
