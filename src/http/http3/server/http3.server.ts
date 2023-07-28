@@ -322,9 +322,7 @@ export class Http3Server {
     }
 
     private onNewStream(quicStream: QuicStream) {
-        console.log("before:this.pingClient();")    
         this.pingClient();
-        console.log("after:this.pingClient();")
         // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
@@ -550,11 +548,10 @@ export class Http3Server {
         console.error(error.stack);
     }
 
-    private pingClient() {
-        console.log("private pingClient")
+    private async pingClient() {
         const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
         const totalPackets = 10;            // 送信するICMPパケットの総数
-        ping.promise.probe(clientAddress)
+        await ping.promise.probe(clientAddress)
           .then((result: any) => {
             if (result.alive) {
               console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
