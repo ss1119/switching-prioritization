@@ -331,12 +331,13 @@ export class Http3Server {
 
     private onNewStream(quicStream: QuicStream) {
         if (this.isFirstConnection) {
-            this.pingClient();
+            this.pingClient().then(() => {
+                console.log(`after:通信遅延: ${this.latency}`);
+                console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+                // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
+            });
             this.isFirstConnection = false;
-            console.log(`after:通信遅延: ${this.latency}`);
-            console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);   
         }
-        // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
