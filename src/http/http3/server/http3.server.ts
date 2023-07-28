@@ -329,15 +329,15 @@ export class Http3Server {
         });
     }
 
-    private async onNewStream(quicStream: QuicStream) {
+    private onNewStream(quicStream: QuicStream) {
         if (this.isFirstConnection) {
-            await this.pingClient().then(() => {
-                console.log(`after:通信遅延: ${this.latency}`);
-                console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
-                // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
-            });
+            this.pingClient();
             this.isFirstConnection = false;
+            console.log(`after:通信遅延: ${this.latency}`);
+            console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+            // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
         }
+
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
@@ -562,10 +562,10 @@ export class Http3Server {
         console.error(error.stack);
     }
 
-    private async pingClient() {
+    private pingClient() {
         const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
         const totalPackets = 10;            // 送信するICMPパケットの総数
-        await ping.promise.probe(clientAddress)
+        ping.promise.probe(clientAddress)
           .then((result: any) => {
             if (result.alive) {
                 console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
