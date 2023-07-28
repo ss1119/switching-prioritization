@@ -11,6 +11,6 @@ fi
 echo "First shutting down running containers (if they exist), then starting new quicker/quicker:latest container."
 
 sudo docker stop quicker_server && sudo docker rm quicker_server  
-sudo docker run --privileged --restart unless-stopped --name quicker_server -p 4433:4433/udp -p 4434:4434/udp -p 4435:4435/udp --volume=/Users/yudai/switching-prioritization-logs:/logs -d quicker/quicker:latest "$@"
+sudo docker run --privileged --restart unless-stopped --name quicker_server -p 4433:4433/udp -p 4434:4434/udp -p 4435:4435/udp --volume=/Users/yudai/switching-prioritization-logs:/logs -d quicker/quicker:latest "$@" tc qdisc add dev eth0 root netem loss 2.5% delay 50ms
 
 echo "Now run    sudo docker logs -f quicker_server    to view output, or    sudo docker exec -it quicker_server bash    to login to container"
