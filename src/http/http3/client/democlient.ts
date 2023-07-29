@@ -69,6 +69,10 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
             ++finishedRequestCount;
 
             if( finishedRequestCount === startedRequestCount ){
+                const endTime = new Date();
+                const plt = endTime.getTime() - startTime.getTime();
+                console.log("PLT:" + plt + "ms");
+
                 VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount );
                 client.DEBUGgetQUICClient()!.close("'Well, I'm back,' he said.");
                 client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
@@ -84,6 +88,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
 
         ++startedRequestCount;
         client.get("/index_with_subresources.html", authority, 16);
+        const startTime = new Date();
     } 
     // using the hardcoded lookup table for synthetic testing 
     else {
