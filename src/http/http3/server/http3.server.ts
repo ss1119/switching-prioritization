@@ -331,7 +331,10 @@ export class Http3Server {
 
     private onNewStream(quicStream: QuicStream) {
         if (this.isFirstConnection) {
-            this.pingClient();
+            const connection = quicStream.getConnection();
+            const clientInfo = connection.getRemoteInformation();
+            console.log("クライアントのIPアドレス:" + clientInfo.address);
+            this.pingClient(clientInfo.address);
             this.isFirstConnection = false;
             console.log(`after:通信遅延: ${this.latency}`);
             console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
@@ -562,8 +565,7 @@ export class Http3Server {
         console.error(error.stack);
     }
 
-    private pingClient() {
-        const clientAddress = '127.0.0.1';  // クライアントのIPアドレスを指定
+    private pingClient(clientAddress: string) {
         const totalPackets = 10;            // 送信するICMPパケットの総数
         ping.promise.probe(clientAddress)
           .then((result: any) => {
@@ -578,7 +580,7 @@ export class Http3Server {
             }
       
             if (this.sentPackets !== totalPackets) {
-                setTimeout(() => this.pingClient(), 100); // 0.1秒ごとにクライアントにpingを送信
+                setTimeout(() => this.pingClient(clientAddress), 100); // 0.1秒ごとにクライアントにpingを送信
             } else {
                 this.packetLossRate = ((totalPackets - this.receivedPackets) / totalPackets) * 100;
                 this.latency = this.totalLatency / totalPackets;
