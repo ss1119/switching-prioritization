@@ -21,7 +21,7 @@ import { Http3RequestMetadata } from "../client/http3.requestmetadata";
 // const resourceListName: string | undefined = process.argv[6] || undefined;
 // const resourceList: {[path: string]: Http3RequestMetadata} | undefined = resourceListName === undefined ? undefined : JSON.parse(readFileSync(resourceListName, "utf-8")).resources;
 
-const schemeName = undefined;
+const schemeName: string | undefined = process.argv[2] || undefined;
 const resourceList = undefined;
 let host = "127.0.0.1";
 let port = parseInt(process.argv[3]) || 4434;
@@ -37,7 +37,10 @@ Constants.LOG_FILE_NAME = "server.log";
 
 VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
 
-let server: Http3Server = new Http3Server(resolve(__dirname + key), resolve(__dirname + cert), "rr", resourceList);
+console.log("schemeName" + process.argv[2])
+console.log(schemeName)
+
+let server: Http3Server = new Http3Server(resolve(__dirname + key), resolve(__dirname + cert), schemeName, resourceList);
 server.listen(port, host);
 
 console.log("HTTP/3 server listening on port "+ host +":"+ port +", log level " + Constants.LOG_LEVEL);
