@@ -35,10 +35,7 @@ if (isNaN(Number(port))) {
 
 Constants.LOG_FILE_NAME = "server.log";
 
-VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
-
-console.log("schemeName" + process.argv[2])
-console.log(schemeName)
+VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert + ", schemeName: " + schemeName);
 
 let server: Http3Server = new Http3Server(resolve(__dirname + key), resolve(__dirname + cert), schemeName, resourceList);
 server.listen(port, host);
