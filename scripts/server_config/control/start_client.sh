@@ -11,6 +11,6 @@ fi
 echo "First shutting down running containers (if they exist), then starting new quicker/quicker:latest container."
 
 sudo docker stop quicker_client && sudo docker rm quicker_client
-sudo docker run --privileged --restart unless-stopped --name quicker_client --network quicker --net=host -p 4433:4433/udp -p 4434:4434/udp -p 4435:4435/udp --volume=/Users/yudai/switching-prioritization-logs:/logs -d quicker/quicker:latest "$@"
+sudo docker run --privileged --restart unless-stopped --name quicker_client --network quicker --volume=/Users/yudai/switching-prioritization-logs:/logs -d quicker/quicker:latest "$@"
 
 echo "Now run    sudo docker logs -f quicker_client    to view output, or    sudo docker exec -it quicker_client bash    to login to container"
