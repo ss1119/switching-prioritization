@@ -23,7 +23,7 @@ import { Http3RequestMetadata } from "../client/http3.requestmetadata";
 
 const schemeName: string | undefined = process.argv[2] || undefined;
 const resourceList = undefined;
-let host = "quicker_server";
+let host = "0.0.0.0";
 let port = parseInt(process.argv[3]) || 4434;
 let key  = "../../../../../keys/selfsigned_default.key";
 let cert = "../../../../../keys/selfsigned_default.crt";
