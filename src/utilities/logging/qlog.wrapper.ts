@@ -120,15 +120,15 @@ export class QlogWrapper{
     }
 
     // FIXME: make this of type qlog.IEventTuple instead of any (but also allow a more general setup that can bypass this if absolutely needed)
-    private logToFile(evt:any[]){
-        if( this.wasClosed ){
-            VerboseLogging.warn("qlog was already closed, not appending!" + JSON.stringify(evt));
-            return;
-        }
+    // private logToFile(evt:any[]){
+    //     if( this.wasClosed ){
+    //         VerboseLogging.warn("qlog was already closed, not appending!" + JSON.stringify(evt));
+    //         return;
+    //     }
 
-        evt[0] = ((new Date()).getTime() - this.startTime); // we store the delta, which is small enough, shouldn't need a string
-        this.logger.error( "                " + JSON.stringify(evt) + ",");
-    }
+    //     evt[0] = ((new Date()).getTime() - this.startTime); // we store the delta, which is small enough, shouldn't need a string
+    //     this.logger.error( "                " + JSON.stringify(evt) + ",");
+    // }
 
     public onPathUpdate( ipVersion:string, localAddress:string, localPort:number, remoteAddress:string, remotePort:number ){
 
@@ -148,7 +148,7 @@ export class QlogWrapper{
             data
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onPacketTX(packet:BasePacket, trigger:qlog.TransporEventTrigger = qlog.TransporEventTrigger.LINE){
@@ -178,7 +178,7 @@ export class QlogWrapper{
             this.packetToQlog( packet )
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onPacketRX(packet:BasePacket, trigger:qlog.TransporEventTrigger = qlog.TransporEventTrigger.LINE){
@@ -189,7 +189,7 @@ export class QlogWrapper{
             trigger,
             this.packetToQlog( packet )
         ];
-        this.logToFile(evt);
+        // this.logToFile(evt);
         
         
         let spinbit = this.extractSpinbit(packet.getHeader());
@@ -270,7 +270,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onSpinbitToggle(oldValue:number, newValue:number){
@@ -286,7 +286,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     // NOTE: stream states changes should have at least 2 entries, 1 for QUIC and 1 for H3, both with different metadata
@@ -321,7 +321,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onLocalTransportParametersChange(tps:TransportParameters){
@@ -337,7 +337,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onRemoteTransportParametersChange(tps:TransportParameters){
@@ -353,7 +353,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     //----------------------------------------
@@ -380,7 +380,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     onFrame_MaxData(frame:MaxDataFrame, trigger:("PACKET_RX"|"PACKET_TX")){
@@ -395,7 +395,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     //----------------------------------------
@@ -414,7 +414,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onRTTUpdate(latestRTT:number, minRTT:number, smoothedRTT:number, variance:number, maxAckDelay:number, trigger:qlog.RecoveryEventTrigger = qlog.RecoveryEventTrigger.ACK_RX){
@@ -433,7 +433,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onCWNDUpdate(ccPhase:string, currentCWND:number, oldCWND:number, trigger:qlog.RecoveryEventTrigger = qlog.RecoveryEventTrigger.ACK_RX){
@@ -450,7 +450,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     // TODO: maybe currentCWND is not needed here? separate event? would just be included here to easily calculate available_cwnd value from bytes_in_flight
@@ -466,7 +466,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onLossDetectionArmed(alarmType:string, lastSentHandshakeTimestamp:Date, alarmDuration:number, trigger:string = "PACKET_TX"){
@@ -483,7 +483,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onLossDetectionTriggered(alarmType:string, metadata:Object, trigger:string = "TIMEOUT"){
@@ -499,7 +499,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     //----------------------------------------
@@ -520,7 +520,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     // e.g., onHTTPStreamStateChanged(stream.id, H3StreamState.OPENED, "GET")
@@ -542,7 +542,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onHTTPFrame_Data(frame:Http3DataFrame, trigger:("TX"|"RX")){
@@ -557,7 +557,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onHTTPFrame_Headers(frame:Http3HeaderFrame, trigger:("TX"|"RX")){
@@ -575,7 +575,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     // TODO: change frame to be the actual HTTP3 Settings Frame class!
@@ -599,7 +599,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onHTTPFrame_Priority(frame:Http3PriorityFrame, trigger:("TX"|"RX")) {
@@ -622,7 +622,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     // FIXME This should probably be removed later, mostly here for debugging of prioritisation
@@ -639,7 +639,7 @@ export class QlogWrapper{
             }
         ]
         
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
     
     // this is a more high-level log message that makes it easier to just follow HTTP level stuff without having to parse HEADERS
@@ -658,7 +658,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     // Event is currently only triggered by structural changes, not by weight changes
@@ -674,7 +674,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     //----------------------------------------
@@ -696,7 +696,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onQPACKDecoderInstruction(streamID:Bignum, instruction:Buffer, trigger:string){
@@ -713,7 +713,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     public onQPACKEncode(encoded:Buffer, decoded: Http3Header[], trigger:string) {
@@ -732,7 +732,7 @@ export class QlogWrapper{
             }
         ];
 
-        this.logToFile(evt);
+        // this.logToFile(evt);
     }
 
     private guessQPACKEncoderInstruction(instruction:Buffer): string {
