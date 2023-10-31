@@ -393,9 +393,9 @@ napi_value encodeHeaders(napi_env env, napi_callback_info info) {
 
     printf("Prefix size: %lu\nTotal header size: %lu\nTotal encoder size: %lu\n", prefix_sz, total_header_sz, total_enc_sz);
 
-    for (size_t i = 0; i < total_header_sz; ++i) {
-        printf("header_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(header_buf[i]));
-    }
+    // for (size_t i = 0; i < total_header_sz; ++i) {
+    //     printf("header_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(header_buf[i]));
+    // }
     
     for (size_t i = 0; i < total_enc_sz; ++i) {
         printf("encoder_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(enc_buf[i]));
