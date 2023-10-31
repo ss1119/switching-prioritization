@@ -338,7 +338,20 @@ export class Http3Server {
             this.isFirstConnection = false;
             console.log(`after:通信遅延: ${this.latency}`);
             console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
-            // todo:ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
+            // ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
+            if (this.latency >= 50 && this.packetLossRate >= 1) {
+              this.prioritizationSchemeName = "dfifo";
+              console.log(`this.latency >= 50 && this.packetLossRate >= 1で，dfifoが選択されました`);
+            } else if(this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3){
+              this.prioritizationSchemeName = "dfifo";
+              console.log(`this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3で，dfifoが選択されました`);
+            } else if(this.latency < 30 && this.packetLossRate >= 4) {
+              this.prioritizationSchemeName = "dfifo";
+              console.log(`this.latency < 30 && this.packetLossRate >= 4で，dfifoが選択されました`);
+            } else {
+              this.prioritizationSchemeName = "rr";
+              console.log(`rrが選択されました`);
+            }
         }
 
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
