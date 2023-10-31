@@ -80,15 +80,15 @@ export class AckHandler {
             if (frame.getType() === FrameType.ACK) {
                 let ackFrame = <AckFrame>frame;
                 let packetNumbers = ackFrame.determineAckedPacketNumbers();
-                VerboseLogging.info(this.DEBUGname + " ackHandler:onPacketAcked Sent Packet " + sentPacket.getHeader().getPacketNumber()!.getValue().toNumber() + " was acked by peer and contained ACKs for received packets " + (packetNumbers.map((val, idx, arr) => val.toNumber())).join(",") );
+                // VerboseLogging.info(this.DEBUGname + " ackHandler:onPacketAcked Sent Packet " + sentPacket.getHeader().getPacketNumber()!.getValue().toNumber() + " was acked by peer and contained ACKs for received packets " + (packetNumbers.map((val, idx, arr) => val.toNumber())).join(",") );
 
                 packetNumbers.forEach((packetNumber: Bignum) => {
                     if (this.receivedPackets[packetNumber.toString('hex', 8)] !== undefined) {
                         delete this.receivedPackets[packetNumber.toString('hex', 8)];
-                        VerboseLogging.info(this.DEBUGname + " ackHandler:onPacketAcked Received packet " + packetNumber.toNumber() + " is now removed from 'list of things to ack'" );
+                        // VerboseLogging.info(this.DEBUGname + " ackHandler:onPacketAcked Received packet " + packetNumber.toNumber() + " is now removed from 'list of things to ack'" );
                     }
                     else{
-                        VerboseLogging.info(this.DEBUGname + " ackHandler:onPacketAcked Packet " + packetNumber.toNumber() + " was no longer in this.receivedPackets, previously acked?");
+                        // VerboseLogging.info(this.DEBUGname + " ackHandler:onPacketAcked Packet " + packetNumber.toNumber() + " was no longer in this.receivedPackets, previously acked?");
                     }
                 });
             }
