@@ -203,7 +203,7 @@ export class Http3Server {
         this.resourceList = resourceList;
 
         this.isFirstConnection = true;
-        this.isSchemeChangeDone = false;
+        this.isSchemeChangeDone = true;
         this.packetLossRate = 0;
         this.sentPackets = 0;
         this.receivedPackets = 0;
@@ -607,6 +607,7 @@ export class Http3Server {
                 this.latency = this.totalLatency / totalPackets;
                 console.log(`通信遅延: ${this.latency}`);
                 console.log(`パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+                this.isSchemeChangeDone = false;
             }
           })
           .catch((error: Error) => {
