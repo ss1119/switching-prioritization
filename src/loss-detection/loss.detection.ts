@@ -161,7 +161,7 @@ export class LossDetection extends EventEmitter {
             VerboseLogging.error(this.DEBUGname + " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         }
         else{
-            VerboseLogging.debug(this.DEBUGname + " loss:onPacketSent : adding packet " +  packetNumber.toNumber() + ", is retransmittable=" + basePacket.isRetransmittable() );
+            // VerboseLogging.debug(this.DEBUGname + " loss:onPacketSent : adding packet " +  packetNumber.toNumber() + ", is retransmittable=" + basePacket.isRetransmittable() );
 
             this.sentPackets[packetNumber.toString('hex', 8)] = sentPacket;
         }
@@ -282,11 +282,11 @@ export class LossDetection extends EventEmitter {
         // TODO: replace retransmittablePacketsOutstanding by bytesInFlight
         if (this.retransmittablePacketsOutstanding === 0) {
             this.lossDetectionAlarm.reset();
-            VerboseLogging.info(this.DEBUGname + " LossDetection:setLossDetectionAlarm : no outstanding retransmittable packets, disabling loss alarm for now");
+            // VerboseLogging.info(this.DEBUGname + " LossDetection:setLossDetectionAlarm : no outstanding retransmittable packets, disabling loss alarm for now");
             return;
         }
         else
-            VerboseLogging.debug(this.DEBUGname + " LossDetection:setLossDetectionAlarm : " + this.retransmittablePacketsOutstanding + " outstanding retransmittable packets" );
+            // VerboseLogging.debug(this.DEBUGname + " LossDetection:setLossDetectionAlarm : " + this.retransmittablePacketsOutstanding + " outstanding retransmittable packets" );
         
         var alarmDuration: number;
         var time: number = this.timeOfLastSentRetransmittablePacket;
@@ -302,11 +302,11 @@ export class LossDetection extends EventEmitter {
             var pw = Math.pow(2, this.handshakeCount);
             alarmDuration = alarmDuration * pw;
             time = this.timeOfLastSentHandshakePacket;
-            VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: handshake mode " + alarmDuration );
+            // VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: handshake mode " + alarmDuration );
         } else if (this.lossTime != 0) {
             // Early retansmit timer or time loss detection
             alarmDuration = this.lossTime - this.timeOfLastSentRetransmittablePacket;
-            VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: early retransmit " + alarmDuration);
+            // VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: early retransmit " + alarmDuration);
         } else {
             // RTO or TLP alarm
             //Calculate RTO duration
@@ -327,19 +327,19 @@ export class LossDetection extends EventEmitter {
                 */
                 let tlpDuration = Math.max( this.rttMeasurer.maxAckDelay + this.rttMeasurer.smoothedRtt * 1.5, LossDetection.MIN_TLP_TIMEOUT);
                 alarmDuration = Math.min( tlpDuration, alarmDuration );
-                VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: TLP " + alarmDuration);
+                // VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: TLP " + alarmDuration);
             }
-            else
-                VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: RTO " + alarmDuration);
+            // else
+                // VerboseLogging.debug(this.DEBUGname + " LossDetection:alarm: RTO " + alarmDuration);
         }
 
         if (!this.lossDetectionAlarm.isRunning()) {
             this.lossDetectionAlarm.on(AlarmEvent.TIMEOUT, (timePassed:number) => {
-                VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// LossDetection: alarm fired  //////////////////////////////// ");
-                VerboseLogging.info(this.DEBUGname + " LossDetection:setLossDetectionAlarm timeout alarm fired after " + timePassed + "ms");
+                // VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// LossDetection: alarm fired  //////////////////////////////// ");
+                // VerboseLogging.info(this.DEBUGname + " LossDetection:setLossDetectionAlarm timeout alarm fired after " + timePassed + "ms");
                 this.lossDetectionAlarm.reset();
                 this.onLossDetectionAlarm();
-                VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// LossDetection: done handling alarm //////////////////////////////// ");
+                // VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// LossDetection: done handling alarm //////////////////////////////// ");
             });
             this.lossDetectionAlarm.start(alarmDuration);
         }

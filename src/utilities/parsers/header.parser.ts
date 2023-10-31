@@ -98,7 +98,7 @@ export class HeaderParser {
 
         let type = firstByte >> 4; // with the highest 2 bits removed above, we just drop the 4 rightmost ones to just keep the 2 type bits
 
-        VerboseLogging.debug("HeaderParser:parseLongHeader: type " + type + " // " + LongHeaderType[type] );
+        // VerboseLogging.debug("HeaderParser:parseLongHeader: type " + type + " // " + LongHeaderType[type] );
 
         if( type === LongHeaderType.Retry ){
             VerboseLogging.error("headerParser:parseLongHeader : parsing a Retry packet, isn't supported yet! (ODCIL length in first byte)");

@@ -60,8 +60,8 @@ for (var i = 0; i < 1; i++) {
 
 	
         setTimeout(() => {
-            for( let i = 0; i < 10; ++i)
-                VerboseLogging.debug("///////////////////////////////////////////////////////////////////////////////");
+            // for( let i = 0; i < 10; ++i)
+            //     VerboseLogging.debug("///////////////////////////////////////////////////////////////////////////////");
                 
             var client2 = Client.connect(host, Number(port), {
                 session: client.getSession(),
@@ -80,15 +80,15 @@ for (var i = 0; i < 1; i++) {
                 //
             });
             client2.on(QuickerEvent.CONNECTION_CLOSE, () => {
-        		VerboseLogging.debug("--------------------------------------------------------------------------------------------------");
-				VerboseLogging.debug("Server closed connection2 " + client2.getConnection().getSrcConnectionID().toString() );
+        		// VerboseLogging.debug("--------------------------------------------------------------------------------------------------");
+				// VerboseLogging.debug("Server closed connection2 " + client2.getConnection().getSrcConnectionID().toString() );
         		PacketLogging.getInstance().logPacketStats( client2.getConnection().getSrcConnectionID().toString() );
 
-				VerboseLogging.debug("=> EXPECTED: TX 1 INITIAL, 2 0-RTT, 1 HANDSHAKE, 3-7 Protected1RTT, then RX 1 INITIAL, 1 HANDSHAKE, 5-7 Protected1RTT\n");
+				// VerboseLogging.debug("=> EXPECTED: TX 1 INITIAL, 2 0-RTT, 1 HANDSHAKE, 3-7 Protected1RTT, then RX 1 INITIAL, 1 HANDSHAKE, 5-7 Protected1RTT\n");
 
-                VerboseLogging.debug("Connection2 allowed early data: " + client2.getConnection().getQuicTLS().isEarlyDataAllowed() + " == true" );
-                VerboseLogging.debug("Connection2 was re-used:        " + client2.getConnection().getQuicTLS().isSessionReused() + " == true");
-                VerboseLogging.debug("Connection2 handshake state:    " + HandshakeState[client2.getConnection().getQuicTLS().getHandshakeState()] + " == COMPLETED" );
+                // VerboseLogging.debug("Connection2 allowed early data: " + client2.getConnection().getQuicTLS().isEarlyDataAllowed() + " == true" );
+                // VerboseLogging.debug("Connection2 was re-used:        " + client2.getConnection().getQuicTLS().isSessionReused() + " == true");
+                // VerboseLogging.debug("Connection2 handshake state:    " + HandshakeState[client2.getConnection().getQuicTLS().getHandshakeState()] + " == COMPLETED" );
 
 				process.exit(0);
             });
@@ -103,16 +103,16 @@ for (var i = 0; i < 1; i++) {
     });
 
     client.on(QuickerEvent.CONNECTION_CLOSE, () => {
-        VerboseLogging.debug("--------------------------------------------------------------------------------------------------");
-		VerboseLogging.debug("Server closed connection " + client.getConnection().getSrcConnectionID().toString() );
+        // VerboseLogging.debug("--------------------------------------------------------------------------------------------------");
+		// VerboseLogging.debug("Server closed connection " + client.getConnection().getSrcConnectionID().toString() );
         PacketLogging.getInstance().logPacketStats( client.getConnection().getSrcConnectionID().toString() );
 
 		console.log("=> EXPECTED: TX 1 INITIAL, 1 HANDSHAKE, 3-7 Protected1RTT, then RX 1 INITIAL, 2 HANDSHAKE, 5-7 Protected1RTT\n");
 
         // note: isEarlyDataAllowed() always return true, even if the session wasn't resumed (at least if the server allows early data on resumed connections). This does NOT mean early data was used ont he connection
-        VerboseLogging.debug("Connection1 allowed early data: " + client.getConnection().getQuicTLS().isEarlyDataAllowed() + " == true" );
-        VerboseLogging.debug("Connection1 was re-used:        " + client.getConnection().getQuicTLS().isSessionReused() + " == false");
-        VerboseLogging.debug("Connection1 handshake state:    " + HandshakeState[client.getConnection().getQuicTLS().getHandshakeState()] + " == COMPLETED" );
+        // VerboseLogging.debug("Connection1 allowed early data: " + client.getConnection().getQuicTLS().isEarlyDataAllowed() + " == true" );
+        // VerboseLogging.debug("Connection1 was re-used:        " + client.getConnection().getQuicTLS().isSessionReused() + " == false");
+        // VerboseLogging.debug("Connection1 handshake state:    " + HandshakeState[client.getConnection().getQuicTLS().getHandshakeState()] + " == COMPLETED" );
 
         //process.exit(0);
     });

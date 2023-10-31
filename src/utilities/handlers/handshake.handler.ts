@@ -104,7 +104,7 @@ export class HandshakeHandler extends EventEmitter{
                 VerboseLogging.error("HandshakeHandler:debugLogTLSMessage : unexpected EncryptionLevel : " + TLSMessageType[type] + " expects " + EncryptionLevel[expectedLevel] + " but we have " + EncryptionLevel[actualLevel] );
             }
             else{
-                VerboseLogging.debug("HandshakeHandler:debugLogTLSMessage : TLS Message " + TLSMessageType[type] + " will be sent at correct encryption level " + EncryptionLevel[actualLevel] );
+                // VerboseLogging.debug("HandshakeHandler:debugLogTLSMessage : TLS Message " + TLSMessageType[type] + " will be sent at correct encryption level " + EncryptionLevel[actualLevel] );
             }
         }
     }

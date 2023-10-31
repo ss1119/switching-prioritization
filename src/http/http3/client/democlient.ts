@@ -60,8 +60,8 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
                 return [header.name, header.value];
             });
     
-            console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
-            VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
 
             const mimeType: string | undefined = response.getHeaderFrame().getHeaderValue("Content-Type");
             if (mimeType !== undefined) {
@@ -100,8 +100,8 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
                 return [header.name, header.value];
             });
     
-            console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
-            VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
     
             if( !lookupTable.resources[path] ){
                 VerboseLogging.error("Path does not exist! "  + JSON.stringify(lookupTable.resources, null, 4) + ":" + path);       

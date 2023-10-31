@@ -94,7 +94,7 @@ export class Server extends Endpoint {
             // TODO: now we're going to re-parse the entire packet, but we already parsed the header... see packet.offset
             // could be optimized so we don't re-parse the headers 
             //this.onMessage( packet.packet.fullContents, undefined, packet.connection );
-            VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// Server: PROCESSING BUFFERED PACKET //////////////////////////////// ");
+            // VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// Server: PROCESSING BUFFERED PACKET //////////////////////////////// ");
             VerboseLogging.info("server:BufferedPacketReadyForDecryption: raw message from the wire : " + packet.packet.fullContents.toString('hex'));
             this.processPackets( [packet.packet], undefined, packet.connection, packet.receivedTime );
         });
@@ -103,7 +103,7 @@ export class Server extends Endpoint {
     private onMessage(msg: Buffer, rinfo: RemoteInfo | undefined): any {
         this.DEBUGmessageCounter++;
         
-        VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// Server: ON MESSAGE "+ this.DEBUGmessageCounter +" //////////////////////////////// " + msg.length);
+        // VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// Server: ON MESSAGE "+ this.DEBUGmessageCounter +" //////////////////////////////// " + msg.length);
 
         VerboseLogging.trace("server:onMessage: message length in bytes: " + msg.byteLength);
         VerboseLogging.info("server:onMessage: raw message from the wire : " + msg.toString('hex'));
@@ -137,7 +137,7 @@ export class Server extends Endpoint {
             return;
         }
 
-        VerboseLogging.debug("Server:onMessage: Message contains " + packets.length + " independent packets (we think)");
+        // VerboseLogging.debug("Server:onMessage: Message contains " + packets.length + " independent packets (we think)");
 
         this.processPackets( packets!, rinfo, undefined, receivedTime );
     }
@@ -168,9 +168,9 @@ export class Server extends Endpoint {
                     // setImmediate() schedules the .handle() for the next iteration of the event loop, somewhat combatting this problem in practice
                     // see also: https://rclayton.silvrback.com/scheduling-execution-in-node-js
                     setImmediate( () => {
-                        VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// Server: handling packet  //////////////////////////////// ");
+                        // VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// Server: handling packet  //////////////////////////////// ");
                         this.packetHandler.handle(connection!, fullyDecryptedPacket, receivedTime);
-                        VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// Server: done handling packet //////////////////////////////// ");
+                        // VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// Server: done handling packet //////////////////////////////// ");
                     });
                 }
                 else
@@ -187,7 +187,7 @@ export class Server extends Endpoint {
                     return;
                 }
                 else if (err instanceof QuicError && err.getErrorCode() === ConnectionErrorCodes.VERSION_NEGOTIATION_ERROR) {
-                    VerboseLogging.debug("Server:processPackets : VERSION_NEGOTIATION_ERROR : unsupported version in INITIAL packet : " + err + " : re-negotiating");
+                    // VerboseLogging.debug("Server:processPackets : VERSION_NEGOTIATION_ERROR : unsupported version in INITIAL packet : " + err + " : re-negotiating");
                     connection = connection as Connection; // get rid of possible undefined, we check for that above
                     connection.resetConnectionState();
                     // we have received one initial, we need to keep packet numbers at 0, because next one will have pn 1 
@@ -206,7 +206,7 @@ export class Server extends Endpoint {
             }
         });
 
-        VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// Server: done processing these packets //////////////////////////////// ");
+        // VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// Server: done processing these packets //////////////////////////////// ");
     }
 
     public closeConnection(connection:Connection, error:QuicError){

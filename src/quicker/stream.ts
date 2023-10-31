@@ -151,9 +151,9 @@ export class Stream extends FlowControlledObject {
             if( !isFin )
                 this.checkBufferedData();
             else{
-                VerboseLogging.debug("Stream:receiveData : stream delivered in-full : emptying buffered data : " + this.bufferedData.length );
+                // VerboseLogging.debug("Stream:receiveData : stream delivered in-full : emptying buffered data : " + this.bufferedData.length );
                 for( let item of this.bufferedData ){
-                    VerboseLogging.debug("Stream:receiveData : stream delivered in-full : emptying buffered data : [" + item.offset.toDecimalString() + ", " + item.offset.add(item.data.byteLength).toDecimalString() + "]");
+                    // VerboseLogging.debug("Stream:receiveData : stream delivered in-full : emptying buffered data : [" + item.offset.toDecimalString() + ", " + item.offset.add(item.data.byteLength).toDecimalString() + "]");
                 }
                 
                 this.bufferedData = new Array<BufferedData>();
@@ -170,11 +170,11 @@ export class Stream extends FlowControlledObject {
         else if( offset.add(data.byteLength).lessThanOrEqual(this.getCurrentReceivedOffset()) ){
 			// Offset is smaller than local offset
             // --> data is already received by the application, thus ignore data.
-            VerboseLogging.debug("Stream:receiveData : 3 : data was completely below current received offset, ignoring. " + this.getCurrentReceivedOffset().toDecimalString() + " > " + offset.toDecimalString() + " and >= " + offset.add(data.byteLength).toDecimalString() );
+            // VerboseLogging.debug("Stream:receiveData : 3 : data was completely below current received offset, ignoring. " + this.getCurrentReceivedOffset().toDecimalString() + " > " + offset.toDecimalString() + " and >= " + offset.add(data.byteLength).toDecimalString() );
         }
         //4. partial overlap, this is where it gets nasty
         else {
-            VerboseLogging.debug("Stream:receiveData : 4 : data partially overlaps, adjusting and redoing : " + this.getCurrentReceivedOffset().toDecimalString() + " between " + offset.toDecimalString() + " and " + offset.add(data.byteLength).toDecimalString() );
+            // VerboseLogging.debug("Stream:receiveData : 4 : data partially overlaps, adjusting and redoing : " + this.getCurrentReceivedOffset().toDecimalString() + " between " + offset.toDecimalString() + " and " + offset.add(data.byteLength).toDecimalString() );
             // representation of situation: 
             // .....................|  < current offset
             //             |..................| < incoming data
@@ -197,7 +197,7 @@ export class Stream extends FlowControlledObject {
 		this.emit(StreamEvent.DATA, data);
         this.addLocalOffset(data.byteLength); // addCurrentReceivedOffset
 
-        VerboseLogging.debug("Stream:bubbleUpReceivedData : new current received offset is at " + this.getCurrentReceivedOffset().toDecimalString() );
+        // VerboseLogging.debug("Stream:bubbleUpReceivedData : new current received offset is at " + this.getCurrentReceivedOffset().toDecimalString() );
         
         if (isFin) {
             this.finalReceivedOffset = this.getCurrentReceivedOffset();
@@ -231,12 +231,12 @@ export class Stream extends FlowControlledObject {
         }
 
         let firstUp = this.bufferedData[0];
-        VerboseLogging.debug("Stream:checkBufferedData : Checking candidate data " + firstUp.offset.toDecimalString() + ", length " + firstUp.data.byteLength + ". " + (this.bufferedData.length - 1) + " items left in the buffer" );
+        // VerboseLogging.debug("Stream:checkBufferedData : Checking candidate data " + firstUp.offset.toDecimalString() + ", length " + firstUp.data.byteLength + ". " + (this.bufferedData.length - 1) + " items left in the buffer" );
 
         // we are fully sorted. If this offset is > what we expect, nothing behind us is going to be ready for use, so we can stop
         // this is one of our "recursion" stop conditions
         if( firstUp.offset.greaterThan(this.getCurrentReceivedOffset()) ){
-            VerboseLogging.debug("Stream:checkBufferedData : first candidate's offset was too large");
+            // VerboseLogging.debug("Stream:checkBufferedData : first candidate's offset was too large");
             return;
         }
 
