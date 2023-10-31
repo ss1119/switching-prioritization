@@ -173,6 +173,7 @@ export class Http3Server {
     private resourceList?: {[path: string]: Http3RequestMetadata};
 
     private isFirstConnection: boolean;         // クライアントとの最初のコネクションかどうか
+    private isSchemeChangeDone: boolean;        // Schemeの変更が完了したかどうか
     private packetLossRate: number;             // パケットロス率
     private sentPackets: number;                // 送信したパケット数
     private receivedPackets: number;            // 受信したICMPパケットの数
@@ -201,7 +202,8 @@ export class Http3Server {
         this.prioritizationSchemeName = prioritizationSchemeName;
         this.resourceList = resourceList;
 
-        this.isFirstConnection = false;
+        this.isFirstConnection = true;
+        this.isSchemeChangeDone = false;
         this.packetLossRate = 0;
         this.sentPackets = 0;
         this.receivedPackets = 0;
@@ -336,23 +338,29 @@ export class Http3Server {
             console.log("クライアントのIPアドレス:" + clientInfo.address);
             this.pingClient(clientInfo.address);
             this.isFirstConnection = false;
-            console.log(`after:通信遅延: ${this.latency}`);
-            console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
-            // ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
-            if (this.latency >= 50 && this.packetLossRate >= 1) {
-              this.prioritizationSchemeName = "dfifo";
-              console.log(`this.latency >= 50 && this.packetLossRate >= 1で，dfifoが選択されました`);
-            } else if(this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3){
-              this.prioritizationSchemeName = "dfifo";
-              console.log(`this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3で，dfifoが選択されました`);
-            } else if(this.latency < 30 && this.packetLossRate >= 4) {
-              this.prioritizationSchemeName = "dfifo";
-              console.log(`this.latency < 30 && this.packetLossRate >= 4で，dfifoが選択されました`);
-            } else {
-              this.prioritizationSchemeName = "rr";
-              console.log(`rrが選択されました`);
-            }
         }
+
+        if (!this.isSchemeChangeDone){
+        // ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
+        console.log(`after:通信遅延: ${this.latency}`);
+        console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+        if (this.latency >= 50 && this.packetLossRate >= 1) {
+            this.prioritizationSchemeName = "dfifo";
+            console.log(`this.latency >= 50 && this.packetLossRate >= 1で，dfifoが選択されました`);
+            } else if(this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3){
+            this.prioritizationSchemeName = "dfifo";
+            console.log(`this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3で，dfifoが選択されました`);
+            } else if(this.latency < 30 && this.packetLossRate >= 4) {
+            this.prioritizationSchemeName = "dfifo";
+            console.log(`this.latency < 30 && this.packetLossRate >= 4で，dfifoが選択されました`);
+            } else {
+            this.prioritizationSchemeName = "rr";
+            console.log(`rrが選択されました`);
+            }
+            this.isSchemeChangeDone = true;
+        }
+
+
 
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
@@ -599,7 +607,6 @@ export class Http3Server {
                 this.latency = this.totalLatency / totalPackets;
                 console.log(`通信遅延: ${this.latency}`);
                 console.log(`パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
-                this.isFirstConnection = true;
             }
           })
           .catch((error: Error) => {
