@@ -201,7 +201,7 @@ export class Http3Server {
         this.prioritizationSchemeName = prioritizationSchemeName;
         this.resourceList = resourceList;
 
-        this.isFirstConnection = true;
+        this.isFirstConnection = false;
         this.packetLossRate = 0;
         this.sentPackets = 0;
         this.receivedPackets = 0;
@@ -599,6 +599,7 @@ export class Http3Server {
                 this.latency = this.totalLatency / totalPackets;
                 console.log(`通信遅延: ${this.latency}`);
                 console.log(`パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+                this.isFirstConnection = true;
             }
           })
           .catch((error: Error) => {
