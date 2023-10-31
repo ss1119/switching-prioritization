@@ -227,7 +227,7 @@ export class Connection extends FlowControlledObject {
     private hookCongestionControlEvents() {
         this.congestionControl.on(CongestionControlEvents.PACKET_SENT, (basePacket: BasePacket) => {
             this.qlogger.onPacketTX( basePacket );
-            PacketLogging.getInstance().logOutgoingPacket(this, basePacket);
+            // PacketLogging.getInstance().logOutgoingPacket(this, basePacket);
 
             // can't simply let loss detection listing to the PACKET_SENT event, 
             // because we need to marshall the event to the correct Packet Number Space loss detector
@@ -855,7 +855,7 @@ export class Connection extends FlowControlledObject {
                     highestReceivedNumber = new PacketNumber( new Bignum(0) );
                 closePacket.getHeader().setPacketNumber(this.context1RTT.getPacketNumberSpace().getNext(), new PacketNumber(new Bignum(0)));
                 this.qlogger.onPacketTX( closePacket );
-                PacketLogging.getInstance().logOutgoingPacket(this, closePacket);
+                // PacketLogging.getInstance().logOutgoingPacket(this, closePacket);
                 this.getSocket().send(closePacket.toBuffer(this), this.getRemoteInformation().port, this.getRemoteInformation().address);
             }
             throw new QuickerError(QuickerErrorCodes.IGNORE_PACKET_ERROR);

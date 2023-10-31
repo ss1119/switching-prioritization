@@ -43,7 +43,7 @@ export class PacketHandler {
 
     public handle(connection: Connection, packet: BasePacket, receivedTime: Time) {
         connection.getQlogger().onPacketRX(packet);
-        PacketLogging.getInstance().logIncomingPacket(connection, packet);
+        // PacketLogging.getInstance().logIncomingPacket(connection, packet);
 
         this.onPacketReceived(connection, packet, receivedTime);
 
