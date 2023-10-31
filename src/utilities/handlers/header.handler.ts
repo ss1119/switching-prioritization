@@ -50,7 +50,7 @@ export class HeaderHandler {
 
             if (longHeader.getPacketType() === LongHeaderType.Protected0RTT) {
                 if( !connection.getAEAD().can0RTTDecrypt(encryptingEndpoint) ) {
-                    VerboseLogging.info("HeaderHandler:decryptHeader : cannot yet decrypt received 0RTT packet: buffering");
+                    // VerboseLogging.info("HeaderHandler:decryptHeader : cannot yet decrypt received 0RTT packet: buffering");
                     let ctx = connection.getEncryptionContextByHeader( header );
                     ctx!.bufferPacket( { packet: packet, connection: connection, receivedTime: receivedTime} );
                     return undefined; 
@@ -61,7 +61,7 @@ export class HeaderHandler {
             }
             else if( longHeader.getPacketType() === LongHeaderType.Handshake ){
                 if( !connection.getAEAD().canHandshakeDecrypt(encryptingEndpoint) ) {
-                    VerboseLogging.info("HeaderHandler:handle : cannot yet decrypt received Handshake packet: buffering");
+                    // VerboseLogging.info("HeaderHandler:handle : cannot yet decrypt received Handshake packet: buffering");
                     let ctx = connection.getEncryptionContextByHeader( header );
                     ctx!.bufferPacket( { packet: packet, connection: connection, receivedTime: receivedTime} );
                     return undefined; 
@@ -80,7 +80,7 @@ export class HeaderHandler {
 
         } else {
             if( !connection.getAEAD().can1RTTDecrypt(encryptingEndpoint) ) {
-                VerboseLogging.info("HeaderHandler:handle : cannot yet decrypt received 1RTT packet: buffering");
+                // VerboseLogging.info("HeaderHandler:handle : cannot yet decrypt received 1RTT packet: buffering");
                 let ctx = connection.getEncryptionContextByHeader( header );
                 ctx!.bufferPacket( { packet: packet, connection: connection, receivedTime: receivedTime} );
                 return undefined; 
@@ -153,7 +153,7 @@ export class HeaderHandler {
                     VerboseLogging.error("HeaderHandler:handle : packetnr was smaller than previous highest received: RE-ORDERING not yet supported! TODO! " + header.getPacketNumber()!.getValue().toNumber() + " <= " + highestReceivedNumber.getValue().toNumber() );
             }
 
-            VerboseLogging.info("HeaderHandler:handle : PN space \"" + ctx.getAckHandler().DEBUGname + "\" RX went from " + DEBUGpreviousHighest + " -> " + pnSpace.getHighestReceivedNumber()!.getValue().toNumber() + " (TX = " + pnSpace.DEBUGgetCurrent() + ")" );
+            // VerboseLogging.info("HeaderHandler:handle : PN space \"" + ctx.getAckHandler().DEBUGname + "\" RX went from " + DEBUGpreviousHighest + " -> " + pnSpace.getHighestReceivedNumber()!.getValue().toNumber() + " (TX = " + pnSpace.DEBUGgetCurrent() + ")" );
         }
 
         // custom handlers for long and short headers

@@ -621,7 +621,7 @@ export class AEAD {
             label = Constants.SERVER_INITIAL_LABEL;
         }
         
-        VerboseLogging.info("getClearTextSecret " + clearTextSecret.toString('hex') + " // " + connectionID.toBuffer().toString('hex') + ", " + quicVersionSalt.toString('hex') + " // " + label );
+        // VerboseLogging.info("getClearTextSecret " + clearTextSecret.toString('hex') + " // " + connectionID.toBuffer().toString('hex') + ", " + quicVersionSalt.toString('hex') + " // " + label );
         return hkdf.qhkdfExpandLabel(clearTextSecret, label, Constants.DEFAULT_HASH_SIZE);
     }
 
@@ -698,7 +698,7 @@ export class AEAD {
         packet[pn_offset:pn_offset+pn_length] ^= mask[1:1+pn_length]
         */
 
-       VerboseLogging.info("_headerEncrypt : before PN protection : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
+    //    VerboseLogging.info("_headerEncrypt : before PN protection : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
 
         // PN length are the 2 rightmost bits of the first byte
         let pnLength = (headerAndEncryptedPayload[0] & 0x03) + 1;
@@ -717,7 +717,7 @@ export class AEAD {
             headerAndEncryptedPayload[pnOffset + i] ^= mask[1 + i];
         }
 
-        VerboseLogging.info("_headerEncrypt : aftere PN protection : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
+        // VerboseLogging.info("_headerEncrypt : aftere PN protection : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
 
         return headerAndEncryptedPayload;
     }
@@ -731,7 +731,7 @@ export class AEAD {
         let update = cipher.update(sampleData);
 
         let mask:Buffer = update.slice(0, 5);
-        VerboseLogging.info("_headerDecrypt : before PN unprotect : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
+        // VerboseLogging.info("_headerDecrypt : before PN unprotect : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
 
 
         // for long headers, we mask the 4 rightmost bits (mostly 2 reserved bits and 2 PN length bits)
@@ -751,7 +751,7 @@ export class AEAD {
             headerAndEncryptedPayload[pnOffset + i] ^= mask[1 + i];
         }
 
-        VerboseLogging.info("_headerDecrypt : aftere PN unprotect : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
+        // VerboseLogging.info("_headerDecrypt : aftere PN unprotect : " + headerAndEncryptedPayload.slice(0, sampleOffset + 4).toString("hex") );
 
         return headerAndEncryptedPayload;
     }

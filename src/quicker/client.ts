@@ -178,8 +178,8 @@ export class Client extends Endpoint {
         
         // VerboseLogging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>////////////////////////////// CLIENT ON MESSAGE "+ DEBUGmessageNumber +" ////////////////////////////////" + msg.length);
             
-        VerboseLogging.trace("client:onMessage: message length in bytes: " + msg.byteLength);
-        VerboseLogging.info("client:onMessage: raw message from the wire : " + msg.toString('hex'));
+        // VerboseLogging.trace("client:onMessage: message length in bytes: " + msg.byteLength);
+        // VerboseLogging.info("client:onMessage: raw message from the wire : " + msg.toString('hex'));
         
         let receivedTime = Time.now();
         let packets:PartiallyParsedPacket[]|undefined = undefined;
@@ -188,7 +188,7 @@ export class Client extends Endpoint {
             packets = this.headerParser.parseShallowHeader(msg);
         } 
         catch(err) {
-            VerboseLogging.error("Client:onMessage: could not parse headers! Ignoring packet. " + err.toString() + " -> " + msg.toString('hex') );
+            // VerboseLogging.error("Client:onMessage: could not parse headers! Ignoring packet. " + err.toString() + " -> " + msg.toString('hex') );
             // TODO: FIXME: properly propagate error? though, can't we just ignore this type of packet then? 
             return;
         }
@@ -218,15 +218,15 @@ export class Client extends Endpoint {
                         // VerboseLogging.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<////////////////////////////// Client: done handling packet //////////////////////////////// ");
                     });
                 }
-                else
-                    VerboseLogging.info("Client:processPackets: could not decrypt packet, buffering till later");
+                // else
+                    // VerboseLogging.info("Client:processPackets: could not decrypt packet, buffering till later");
             });
 
             this.connection.startIdleAlarm();
         } 
         catch (err) {
             if (err instanceof QuickerError && err.getErrorCode() === QuickerErrorCodes.IGNORE_PACKET_ERROR) {
-                VerboseLogging.info("Client:processPackets : caught IGNORE_PACKET_ERROR : " + err);
+                // VerboseLogging.info("Client:processPackets : caught IGNORE_PACKET_ERROR : " + err);
                 return;
             }
             if (err instanceof QuicError && err.getErrorCode() === ConnectionErrorCodes.VERSION_NEGOTIATION_ERROR) {

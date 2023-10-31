@@ -38,7 +38,7 @@ Constants.LOG_FILE_NAME = "client.log";
 //process.exit(666);
 
 
-VerboseLogging.info("QUICker client connecting to " + host + ":" + port);
+// VerboseLogging.info("QUICker client connecting to " + host + ":" + port);
 
 var httpHelper = new HttpHelper();
 for (var i = 0; i < 1; i++) {

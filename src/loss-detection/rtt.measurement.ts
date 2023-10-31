@@ -94,12 +94,12 @@ export class RTTMeasurement{
            this.smoothedRtt = this.smoothedRtt * 0.875 + this.latestRtt * 0.125;
         }
 
-        VerboseLogging.info("RTTMeasurerment:updateRTT : latest=" + this.latestRtt + ", smooth="+ this.smoothedRtt +", rttVar=" + this.rttVar + ", maxAckDelay=" + this.maxAckDelay + ". Due to ACK of packet nr " + (largestAcknowledgedPacket.packet.getHeader().getPacketNumber()!.getValue().toNumber()));
+        // VerboseLogging.info("RTTMeasurerment:updateRTT : latest=" + this.latestRtt + ", smooth="+ this.smoothedRtt +", rttVar=" + this.rttVar + ", maxAckDelay=" + this.maxAckDelay + ". Due to ACK of packet nr " + (largestAcknowledgedPacket.packet.getHeader().getPacketNumber()!.getValue().toNumber()));
         if( this.latestRtt < 1 || this.smoothedRtt < 1 || this.rttVar < 1 || this.maxAckDelay < 1 ){
-            VerboseLogging.warn("RTTMeasurerment:updateRTT : something went wrong calculating RTT values, they are too low! latest=" + this.latestRtt + ", smooth="+ this.smoothedRtt +", rttVar=" + this.rttVar + ", maxAckDelay=" + this.maxAckDelay );
+            // VerboseLogging.warn("RTTMeasurerment:updateRTT : something went wrong calculating RTT values, they are too low! latest=" + this.latestRtt + ", smooth="+ this.smoothedRtt +", rttVar=" + this.rttVar + ", maxAckDelay=" + this.maxAckDelay );
         }
         else if( this.latestRtt > 2000 || this.smoothedRtt > 2000 || this.rttVar > 2000 || this.maxAckDelay > 2000 ){
-            VerboseLogging.warn("RTTMeasurerment:updateRTT : something went wrong calculating RTT values, they are too high! latest=" + this.latestRtt + ", smooth="+ this.smoothedRtt +", rttVar=" + this.rttVar + ", maxAckDelay=" + this.maxAckDelay );
+            // VerboseLogging.warn("RTTMeasurerment:updateRTT : something went wrong calculating RTT values, they are too high! latest=" + this.latestRtt + ", smooth="+ this.smoothedRtt +", rttVar=" + this.rttVar + ", maxAckDelay=" + this.maxAckDelay );
         }
     }
 }

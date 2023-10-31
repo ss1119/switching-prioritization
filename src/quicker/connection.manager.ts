@@ -105,7 +105,7 @@ export class ConnectionManager extends EventEmitter{
         connection.setSrcConnectionID(ourSrcConnectionID);
         connection.setDestConnectionID(peerSrcConnectionID);
 
-        VerboseLogging.info("ConnectionManager:createConnection : " + rinfo.address + ":" + rinfo.port + " (" + rinfo.family + ")  initialDest=" + peerDestConnectionID.toString() + ", server conn ID (src)=" + ourSrcConnectionID.toString() + ", client conn ID (dst)=" + peerSrcConnectionID.toString() );
+        // VerboseLogging.info("ConnectionManager:createConnection : " + rinfo.address + ":" + rinfo.port + " (" + rinfo.family + ")  initialDest=" + peerDestConnectionID.toString() + ", server conn ID (src)=" + ourSrcConnectionID.toString() + ", client conn ID (dst)=" + peerSrcConnectionID.toString() );
         // VerboseLogging.debug("ConnectionManager:createConnection : current list : " + Object.keys(this.connections).map( (v:string) => v + "," ) );
         // VerboseLogging.debug("ConnectionManager:createConnection : current mapped list : " + Object.keys(this.mappedConnections).map( (v:string) => v + "," ) );
 

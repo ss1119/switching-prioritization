@@ -108,7 +108,7 @@ export class AckHandler {
         
         this.receivedPackets[pn.toString('hex', 8)] = {time: time, ackOnly: packet.isAckOnly()};
 
-        VerboseLogging.info(this.DEBUGname + " AckHandler:onPacketReceived : added packet " + pn.toNumber() + ", ackOnly=" + packet.isAckOnly() );
+        // VerboseLogging.info(this.DEBUGname + " AckHandler:onPacketReceived : added packet " + pn.toNumber() + ", ackOnly=" + packet.isAckOnly() );
 
         ++this.totalPacketsSinceLastAckFrameSent;
 
@@ -118,12 +118,12 @@ export class AckHandler {
             ++this.ackablePacketsSinceLastAckFrameSent;
             if( !this.alarm.isRunning() ){
                 this.setAlarm(connection); 
-                VerboseLogging.info(this.DEBUGname + " AckHandler:onPacketReceived : starting ACK alarm to trigger new ACK frame in " + this.alarm.getDuration() + "ms. " + this.ackablePacketsSinceLastAckFrameSent + " ACK-able packets outstanding.");
+                // VerboseLogging.info(this.DEBUGname + " AckHandler:onPacketReceived : starting ACK alarm to trigger new ACK frame in " + this.alarm.getDuration() + "ms. " + this.ackablePacketsSinceLastAckFrameSent + " ACK-able packets outstanding.");
             }
         }
         else if( this.ackablePacketsSinceLastAckFrameSent == 0 ){
             this.alarm.reset(); // this SHOULDN'T be running, but just to make sure, let's reset it, ok?
-            VerboseLogging.info(this.DEBUGname + " AckHandler:onPacketReceived : no ACK-able packets outstanding, stopping ACK alarm. Total ack-only outstanding: " + this.totalPacketsSinceLastAckFrameSent);
+            // VerboseLogging.info(this.DEBUGname + " AckHandler:onPacketReceived : no ACK-able packets outstanding, stopping ACK alarm. Total ack-only outstanding: " + this.totalPacketsSinceLastAckFrameSent);
         }
     }
 
@@ -131,13 +131,13 @@ export class AckHandler {
 
     public getAckFrame(connection: Connection): AckFrame | undefined {
 
-        VerboseLogging.trace(this.DEBUGname + " AckHandler:getAckFrame: START");
+        // VerboseLogging.trace(this.DEBUGname + " AckHandler:getAckFrame: START");
 
         // we only want to generate ACK frames if we have actual ACK-able packets
         // e.g., for ACK-only or PADDING-only packets, we don't want to generate ACK frames
         // TODO: FIXME: limit of 10 is -very- arbitrary and shouldn't even be needed (everything should work without acks of acks), but as a quick fix, this should work
         if( this.totalPacketsSinceLastAckFrameSent < 10 && this.ackablePacketsSinceLastAckFrameSent == 0 ){
-            VerboseLogging.trace(this.DEBUGname + " AckHandler:getAckFrame: no new ACK-able packets received since last ACK frame, not generating new one");
+            // VerboseLogging.trace(this.DEBUGname + " AckHandler:getAckFrame: no new ACK-able packets received since last ACK frame, not generating new one");
             return undefined;
         }
 
@@ -182,7 +182,7 @@ export class AckHandler {
         for( let n = 0; n < packetnumbers.length; ++n )
             numberString += "" + packetnumbers[n].toNumber() + ",";
 
-        VerboseLogging.info(this.DEBUGname + " AckHandler:getAckFrame : This ACK frame will contain " + packetnumbers.length + " acked packets, with numbers : " + numberString);
+        // VerboseLogging.info(this.DEBUGname + " AckHandler:getAckFrame : This ACK frame will contain " + packetnumbers.length + " acked packets, with numbers : " + numberString);
         
 
         for (var i = 1; i < packetnumbers.length; i++) {

@@ -18,18 +18,18 @@ export class TestStreamBuffering  {
         let outputData = "";
         let stream:Stream = new Stream(EndpointType.Server, new Bignum(666));
 
-        VerboseLogging.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Testcase " + nr + " START");
+        // VerboseLogging.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Testcase " + nr + " START");
 
         stream.on( StreamEvent.DATA, (data:Buffer) => {
             //console.log( data.toString("utf8") );
-            VerboseLogging.trace("Testcase " + nr + " : DATA : " + data.byteLength);
+            // VerboseLogging.trace("Testcase " + nr + " : DATA : " + data.byteLength);
             outputData += data.toString("utf8");
         });
 
         stream.on( StreamEvent.END, () => {
             let outputHash = createHash('md5').update(outputData).digest("hex");
             if( (outputHash === inputHash) ){
-                VerboseLogging.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Testcase " + nr + " : STREAM END : " + (outputHash === inputHash) + " ? " + outputHash + " ?== " + inputHash );
+                // VerboseLogging.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Testcase " + nr + " : STREAM END : " + (outputHash === inputHash) + " ? " + outputHash + " ?== " + inputHash );
                 TestStreamBuffering.successfullTestcaseCount += 1;
             }
             else

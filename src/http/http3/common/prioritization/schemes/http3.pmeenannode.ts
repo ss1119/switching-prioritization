@@ -76,10 +76,10 @@ export class Http3PMeenanNode extends EventEmitter {
             const weight: number = (this.priority << 2) | this.concurrency;
             // Weight is not traditional h3 weight
             this.requestStream.getConnection().getQlogger().onHTTPDataChunk(this.requestStream.getStreamId(), sendBuffer.byteLength, weight, "TX");
-            VerboseLogging.info("Scheduled " + sendBuffer.byteLength + " bytes to be sent on stream " + this.requestStream.getStreamId().toString());
+            // VerboseLogging.info("Scheduled " + sendBuffer.byteLength + " bytes to be sent on stream " + this.requestStream.getStreamId().toString());
             if (this.allDataBuffered === true && this.bufferedData.byteLength === 0) {
                 this.requestStream.getConnection().getQlogger().onHTTPStreamStateChanged(this.requestStream.getStreamId(), Http3StreamState.MODIFIED, "HALF_CLOSED");
-                VerboseLogging.info("Closed stream " + this.requestStream.getStreamId().toString() + ", all data transmitted");
+                // VerboseLogging.info("Closed stream " + this.requestStream.getStreamId().toString() + ", all data transmitted");
                 this.emit(Http3PMeenanNodeEvent.NODE_FINISHED, this, this.priority, this.concurrency);
             }
             return true;

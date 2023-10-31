@@ -100,7 +100,7 @@ export class TestPrioritization {
 
                 if( nextScheme === undefined ){
                     // all done, no more URLS to download!
-                    VerboseLogging.info(`TestPrioritization: Done processing ${schemes.length} schemes for ${testcases.length} testcases, ${goodTestCount} succeeded`);
+                    // VerboseLogging.info(`TestPrioritization: Done processing ${schemes.length} schemes for ${testcases.length} testcases, ${goodTestCount} succeeded`);
                     console.log(`TestPrioritization: Done processing ${schemes.length} schemes for ${testcases.length} testcases, ${goodTestCount} succeeded`);
 
                     console.log("Succeeded cases : ", succeededCases.length, JSON.stringify(succeededCases, null, 4) );
@@ -132,7 +132,7 @@ export class TestPrioritization {
             let serverError:boolean = false;
             let clientError:boolean = false;
 
-            VerboseLogging.info(`Processing ${currentTestcase}, ${succeededCases.length + failedCases.length + 1} out of ${ schemes.length * testcases.length} to run.`); 
+            // VerboseLogging.info(`Processing ${currentTestcase}, ${succeededCases.length + failedCases.length + 1} out of ${ schemes.length * testcases.length} to run.`); 
 
             
             // run this in main quicker directory, e.g., ../node/out/Release/node ./out/test/prioritization/test.prioritization.testcases.ts

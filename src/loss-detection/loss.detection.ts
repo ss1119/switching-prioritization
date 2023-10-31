@@ -176,8 +176,8 @@ export class LossDetection extends EventEmitter {
         if( largestAcknowledgedPacket !== undefined ){
             this.rttMeasurer.updateRTT(ackFrame, largestAcknowledgedPacket);
         }
-        else
-            VerboseLogging.info(this.DEBUGname + " LossDetection:updateRtt : not actually updating RTT because largestAcknowledgedPacket was previously acknowledged in a different ACK frame or it was an ACK-only frame");
+        // else
+            // VerboseLogging.info(this.DEBUGname + " LossDetection:updateRtt : not actually updating RTT because largestAcknowledgedPacket was previously acknowledged in a different ACK frame or it was an ACK-only frame");
 
     }
 
@@ -189,7 +189,7 @@ export class LossDetection extends EventEmitter {
      */
     public onAckReceived(ackFrame: AckFrame): void {
 
-        VerboseLogging.info(this.DEBUGname + " Loss:onAckReceived AckFrame is acking " + ackFrame.determineAckedPacketNumbers().map((val, idx, arr) => val.toNumber()).join(","));
+        // VerboseLogging.info(this.DEBUGname + " Loss:onAckReceived AckFrame is acking " + ackFrame.determineAckedPacketNumbers().map((val, idx, arr) => val.toNumber()).join(","));
         this.largestAckedPacket = ackFrame.getLargestAcknowledged();
         /*
         if (this.sentPackets[ackFrame.getLargestAcknowledged().toString('hex', 8)] !== undefined) {
@@ -243,7 +243,7 @@ export class LossDetection extends EventEmitter {
     private onSentPacketAcked(sentPacket: BasePacket): void {
 
         let ackedPacketNumber: Bignum = sentPacket.getHeader().getPacketNumber()!.getValue();
-        VerboseLogging.info(this.DEBUGname + " loss:onSentPacketAcked called for nr " + ackedPacketNumber.toNumber() + ", is retransmittable=" + this.sentPackets[ackedPacketNumber.toString('hex', 8)].packet.isRetransmittable());
+        // VerboseLogging.info(this.DEBUGname + " loss:onSentPacketAcked called for nr " + ackedPacketNumber.toNumber() + ", is retransmittable=" + this.sentPackets[ackedPacketNumber.toString('hex', 8)].packet.isRetransmittable());
 
         // TODO: move this to the end of this function? 
         // inform ack handler so it can update internal state, congestion control so it can update bytes-in-flight etc.
@@ -351,22 +351,22 @@ export class LossDetection extends EventEmitter {
      */
     public onLossDetectionAlarm(): void {
         if (this.handshakeOutstanding > 0) {
-            VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm Handshake");
+            // VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm Handshake");
             // Handshake retransmission alarm.
             this.retransmitAllUnackedHandshakeData();
             this.handshakeCount++;
         } else if (this.lossTime != 0) {
             // Early retransmit or Time Loss Detection
-            VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm Early Retransmit or time-based");
+            // VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm Early Retransmit or time-based");
             this.detectLostPackets(this.largestAckedPacket);
         } else if (this.tlpCount < LossDetection.MAX_TLP) {
             // Tail Loss Probe.
-            VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm TLP, sendOne");
+            // VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm TLP, sendOne");
             this.sendOnePacket();
             this.tlpCount++;
         } else {
             // RTO
-            VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm RTO, sendTwo");
+            // VerboseLogging.info(this.DEBUGname + " LossDetection:onLossDetectionAlarm RTO, sendTwo");
             if (this.rtoCount === 0) {
                 this.largestSentBeforeRto = this.largestSentPacket;
             }

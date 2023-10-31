@@ -284,7 +284,7 @@ export class Http3Server {
                 throw new Error("Client state could not succesfully be created or added to the clientstate map!");
             }
 
-            VerboseLogging.info("DEBUG: A new HTTP/3 client has connected!");
+            // VerboseLogging.info("DEBUG: A new HTTP/3 client has connected!");
         }
         else if(ALPN && Constants.ALPN_VALID_HTTP09.indexOf(ALPN) >= 0 ){
 
@@ -293,15 +293,15 @@ export class Http3Server {
             ));
 
 
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("DEBUG: A new HTTP/0.9 client has connected!");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("DEBUG: A new HTTP/0.9 client has connected!");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         }    
         else{
             // invalid ALPN: shutting down
@@ -325,7 +325,7 @@ export class Http3Server {
         controlStream.on(Http3ControlStreamEvent.HTTP3_PRIORITY_FRAME, (frame: Http3PriorityFrame) => {
             logger.onHTTPFrame_Priority(frame, "RX");
             h3State.getPrioritiser().handlePriorityFrame(frame, controlStream.getStreamID());
-            VerboseLogging.info("HTTP/3: priority frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: priority frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
         });
     }
 
@@ -439,7 +439,7 @@ export class Http3Server {
                         } catch(error) {
                             // Do nothing if there was not enough data to decode the StreamType
                             if (error instanceof RangeError) {
-                                VerboseLogging.info("Not enough data buffered to decode StreamType. Waiting until more data arrives.");
+                                // VerboseLogging.info("Not enough data buffered to decode StreamType. Waiting until more data arrives.");
                             } else {
                                 throw error;
                             }
@@ -506,7 +506,7 @@ export class Http3Server {
         }
 
         if (requestPath === undefined || method === undefined) {
-            VerboseLogging.info("Received HTTP/3 request with no path and/or method");
+            // VerboseLogging.info("Received HTTP/3 request with no path and/or method");
             state.getPrioritiser().finishStream(quicStream.getStreamId());
         } else {
             let methodHandled: boolean = false;
@@ -517,9 +517,9 @@ export class Http3Server {
                     if (this.handledGetPaths[requestPath] !== undefined) {
                         // Call user function to fill response
                         this.handledGetPaths[requestPath](req, res);
-                        VerboseLogging.info("Request was handled by the server. Responding to HTTP/3 Request.");
+                        // VerboseLogging.info("Request was handled by the server. Responding to HTTP/3 Request.");
                     } else {
-                        VerboseLogging.info("Requested path '" + requestPath + "' has no specific handler. Trying to respond with requested file...");
+                        // VerboseLogging.info("Requested path '" + requestPath + "' has no specific handler. Trying to respond with requested file...");
                         res.sendFile(requestPath);
                     }
                     break;
@@ -554,7 +554,7 @@ export class Http3Server {
 
         if( state instanceof ClientState ){
             state.stopScheduler(); // Immediately stops pushing new data over connection
-            VerboseLogging.info("Stopping server scheduler...");
+            // VerboseLogging.info("Stopping server scheduler...");
             state.getQPackEncoder().close();
             state.getQPackDecoder().close();
             const sendingControlStream: Http3SendingControlStream = state.getSendingControlStream();

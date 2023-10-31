@@ -208,10 +208,10 @@ export class Connection extends FlowControlledObject {
             if( forLevel == EncryptionLevel.ONE_RTT ){
                 if( this.qtls.getHandshakeState() < HandshakeState.CLIENT_COMPLETED ){ // handshake not yet done
 
-                    VerboseLogging.info("Connection:NewDecryptionKeyAvailable : 1RTT keys before handshake done: delaying buffered bubbling");
+                    // VerboseLogging.info("Connection:NewDecryptionKeyAvailable : 1RTT keys before handshake done: delaying buffered bubbling");
 
                     this.qtls.once( QuicTLSEvents.HANDSHAKE_DONE, () => {
-                        VerboseLogging.info("Connection:NewDecryptionKeyAvailable : handshake done: bubbling up any buffered 1RTT packets");
+                        // VerboseLogging.info("Connection:NewDecryptionKeyAvailable : handshake done: bubbling up any buffered 1RTT packets");
                         this.processBufferedReceivedPackets( forLevel );
                     });
 
@@ -442,7 +442,7 @@ export class Connection extends FlowControlledObject {
     }
 
     public setLocalTransportParameters(transportParameters: TransportParameters): void {
-        VerboseLogging.info("Connection:setLocalTransportParameters : " + transportParameters.toJSONstring(true) );
+        // VerboseLogging.info("Conection:setLocalTransportParameters : " + transportParameters.toJSONstring(true) );
         this.getQlogger().onLocalTransportParametersChange( transportParameters );
 
         this.localTransportParameters = transportParameters;
@@ -474,7 +474,7 @@ export class Connection extends FlowControlledObject {
     }
 
     public setRemoteTransportParameters(transportParameters: TransportParameters): void {
-        VerboseLogging.info("Connection:setRemoteTransportParameters : " + transportParameters.toJSONstring(true) );
+        // VerboseLogging.info("Connection:setRemoteTransportParameters : " + transportParameters.toJSONstring(true) );
         this.getQlogger().onRemoteTransportParametersChange( transportParameters );
         
         this.remoteTransportParameters = transportParameters;
@@ -599,7 +599,7 @@ export class Connection extends FlowControlledObject {
         }
 
         let bufferedPackets:Array<BufferedPacket> = ctx.getAndClearBufferedPackets();
-        VerboseLogging.info("Connection:processBufferedReceivedPackets : " + EncryptionLevel[forLevel] + ", bubbling " + bufferedPackets.length + " buffered packets");
+        // VerboseLogging.info("Connection:processBufferedReceivedPackets : " + EncryptionLevel[forLevel] + ", bubbling " + bufferedPackets.length + " buffered packets");
         for( let packet of bufferedPackets ){
             this.emit( ConnectionEvent.BufferedPacketReadyForDecryption, packet );
         }
@@ -646,10 +646,10 @@ export class Connection extends FlowControlledObject {
     }
 
     private retransmitPacket(packet: BasePacket) {
-        VerboseLogging.info("Connection:retransmitPacket : " + PacketType[packet.getPacketType()] + " with nr " + packet.getHeader().getPacketNumber()!.getValue().toNumber() );
+        // VerboseLogging.info("Connection:retransmitPacket : " + PacketType[packet.getPacketType()] + " with nr " + packet.getHeader().getPacketNumber()!.getValue().toNumber() );
 
         if( this.connectionIsClosingOrClosed() ){
-            VerboseLogging.info("Connection:retransmitPacket : we were in a closing state: no more retransmits for us. TODO: maybe we should retransmit in draining?");
+            // VerboseLogging.info("Connection:retransmitPacket : we were in a closing state: no more retransmits for us. TODO: maybe we should retransmit in draining?");
             return;
         }
 
@@ -691,7 +691,7 @@ export class Connection extends FlowControlledObject {
         var framePacket = <BaseEncryptedPacket>packet;
         framePacket.getFrames().forEach((frame: BaseFrame) => {
             if (frame.isRetransmittable()) {
-                VerboseLogging.info("Connection:retransmitPacket : retransmitting frame " + FrameType[frame.getType()] );
+                // VerboseLogging.info("Connection:retransmitPacket : retransmitting frame " + FrameType[frame.getType()] );
                 //VerboseLogging.error("Connection:retransmitPacket : attempting to retransmit STREAM frame, no logic defined for this yet, doing nothing");
                 //if( 1 == 1 ) return;
                 this.retransmitFrame(frame);
@@ -784,7 +784,7 @@ export class Connection extends FlowControlledObject {
 
         this.transmissionAlarm.reset();
         var packets: BasePacket[] = this.flowControl.getPackets();
-        VerboseLogging.info("Connection:sendPackets : queueing " + packets.length + " packets on congestionControl");
+        // VerboseLogging.info("Connection:sendPackets : queueing " + packets.length + " packets on congestionControl");
         this.congestionControl.queuePackets(packets);
     }
 

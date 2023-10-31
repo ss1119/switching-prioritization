@@ -161,7 +161,7 @@ export class Stream extends FlowControlledObject {
         } 
         // 2. offset is "in the future" : just buffer until further notice
         else if (offset.greaterThan(this.getCurrentReceivedOffset())) {
-            VerboseLogging.trace("Stream:receiveData : 2 : data too far ahead, buffering : " + offset.toDecimalString() );
+            // VerboseLogging.trace("Stream:receiveData : 2 : data too far ahead, buffering : " + offset.toDecimalString() );
             this.addBufferedData(data, offset, isFin);
             // No need to call checkBuffered here: we didn't add anything to the buffer that could trigger a proper call to this function
         } 

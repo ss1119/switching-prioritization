@@ -44,9 +44,9 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
     if (lookupTable === undefined) {
         const resourceParser: Http3ResourceParser = new Http3ResourceParser();
         resourceParser.on(Http3ResourceParserEvent.FILES_FOUND, (fileList: string[]) => {
-            VerboseLogging.info("HTTP/3 Resource parser found new resources");
+            // VerboseLogging.info("HTTP/3 Resource parser found new resources");
             for (const file of fileList) {
-                VerboseLogging.info("Requesting newly found resource: " + file);
+                // VerboseLogging.info("Requesting newly found resource: " + file);
                 ++startedRequestCount;
                 client.get(file, authority);
             }
@@ -74,7 +74,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
                 const plt = endTime.getTime() - startTime.getTime();
                 console.log("PLT:" + plt + "ms");
 
-                VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount );
+                // VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount );
                 client.DEBUGgetQUICClient()!.close("'Well, I'm back,' he said.");
                 client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
                 
@@ -128,7 +128,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
 
             ++finishedRequestCount;
             if( finishedRequestCount === startedRequestCount ){
-                VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount + " === " + Object.keys(lookupTable.resources).length );
+                // VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount + " === " + Object.keys(lookupTable.resources).length );
                 client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
                 client.DEBUGgetQUICClient()!.close();
                 

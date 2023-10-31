@@ -56,8 +56,8 @@ export class FlowControl {
     }
 
     public queueFrame(baseFrame: BaseFrame): void {
-        VerboseLogging.info("FlowControl:queueFrame : buffering frame for transmission " + FrameType[baseFrame.getType()] );
-        VerboseLogging.error("FlowControl:queueFrame : We do not yet know to which EncryptionContext this frame belongs, so we cannot retransmit! TODO IMPLEMENT" );
+        // VerboseLogging.info("FlowControl:queueFrame : buffering frame for transmission " + FrameType[baseFrame.getType()] );
+        // VerboseLogging.error("FlowControl:queueFrame : We do not yet know to which EncryptionContext this frame belongs, so we cannot retransmit! TODO IMPLEMENT" );
         console.trace("flowcontrol:queueFrame");
         this.bufferedFrames.push(baseFrame);
     }
@@ -182,7 +182,7 @@ export class FlowControl {
                     VerboseLogging.error("FlowControl:getPackets : cannot encrypt 1RTT packets yet! TODO: buffer, dropping for now");
             }
 
-            VerboseLogging.info("FlowControl:getPackets : created " + DEBUGcryptoFrameCount + " CRYPTO frames");
+            // VerboseLogging.info("FlowControl:getPackets : created " + DEBUGcryptoFrameCount + " CRYPTO frames");
         }
 
         /*

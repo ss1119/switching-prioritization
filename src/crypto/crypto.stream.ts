@@ -105,7 +105,7 @@ export class CryptoStream extends EventEmitter {
         else {
 			// Offset is smaller than local offset
             // --> data is already received by the application, thus ignore data.
-            VerboseLogging.info("CryptoStream:receiveData: received data with too small an offset, probably duplicate, ignoring!" + offset.toNumber() + " < " + this.getLocalOffset() );
+            // VerboseLogging.info("CryptoStream:receiveData: received data with too small an offset, probably duplicate, ignoring!" + offset.toNumber() + " < " + this.getLocalOffset() );
 		}
 	}
 
