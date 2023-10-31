@@ -36,6 +36,8 @@ const lookupTable:any = undefined;
 let startedRequestCount:number = 0;
 let finishedRequestCount:number = 0;
 
+let respoinseCount = 0;
+
 const client: Http3Client = new Http3Client(host, port);
 
 client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
@@ -53,6 +55,8 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
         });
 
         client.on(Http3ClientEvent.RESPONSE_RECEIVED, (path: string, response: Http3Message) => {
+            console.log("responseの数：" + respoinseCount);
+            respoinseCount++;
             const headers: Http3Header[] = response.getHeaderFrame().getHeaders();
             const payload: Buffer = response.getPayload();
             const headerStrings: string[][] = headers.map((header) => {
