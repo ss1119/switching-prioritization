@@ -105,9 +105,9 @@ export class ConnectionManager extends EventEmitter{
         connection.setSrcConnectionID(ourSrcConnectionID);
         connection.setDestConnectionID(peerSrcConnectionID);
 
-        VerboseLogging.info("ConnectionManager:createConnection : " + rinfo.address + ":" + rinfo.port + " (" + rinfo.family + ")  initialDest=" + peerDestConnectionID.toString() + ", server conn ID (src)=" + ourSrcConnectionID.toString() + ", client conn ID (dst)=" + peerSrcConnectionID.toString() );
-        VerboseLogging.debug("ConnectionManager:createConnection : current list : " + Object.keys(this.connections).map( (v:string) => v + "," ) );
-        VerboseLogging.debug("ConnectionManager:createConnection : current mapped list : " + Object.keys(this.mappedConnections).map( (v:string) => v + "," ) );
+        // VerboseLogging.info("ConnectionManager:createConnection : " + rinfo.address + ":" + rinfo.port + " (" + rinfo.family + ")  initialDest=" + peerDestConnectionID.toString() + ", server conn ID (src)=" + ourSrcConnectionID.toString() + ", client conn ID (dst)=" + peerSrcConnectionID.toString() );
+        // VerboseLogging.debug("ConnectionManager:createConnection : current list : " + Object.keys(this.connections).map( (v:string) => v + "," ) );
+        // VerboseLogging.debug("ConnectionManager:createConnection : current mapped list : " + Object.keys(this.mappedConnections).map( (v:string) => v + "," ) );
 
         // it is important to keep a mapping from the initialDestID to our new, self-chosen conn-ID, because packets might arrive with that original ID set (e.g., 0RTT, VNEG, duplicate initials)
         this.connections[connection.getSrcConnectionID().toString()] = connection;

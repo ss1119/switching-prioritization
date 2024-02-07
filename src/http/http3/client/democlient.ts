@@ -25,7 +25,7 @@ import { start } from "repl";
 // let version = process.argv[7] || Constants.getActiveVersion(); // pass "deadbeef" to force version negotiation
 
 
-let host = process.argv[2] || "0.0.0.0";
+let host = "172.18.0.2";
 let port = parseInt(process.argv[3]) || 4433;
 const authority: string = host + ":" + port
 let version = process.argv[4] || Constants.getActiveVersion(); // pass "deadbeef" to force version negotiation
@@ -44,23 +44,24 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
     if (lookupTable === undefined) {
         const resourceParser: Http3ResourceParser = new Http3ResourceParser();
         resourceParser.on(Http3ResourceParserEvent.FILES_FOUND, (fileList: string[]) => {
-            VerboseLogging.info("HTTP/3 Resource parser found new resources");
+            // VerboseLogging.info("HTTP/3 Resource parser found new resources");
             for (const file of fileList) {
-                VerboseLogging.info("Requesting newly found resource: " + file);
+                // VerboseLogging.info("Requesting newly found resource: " + file);
                 ++startedRequestCount;
                 client.get(file, authority);
             }
         });
 
         client.on(Http3ClientEvent.RESPONSE_RECEIVED, (path: string, response: Http3Message) => {
+            console.log("requestの数：" + startedRequestCount);
             const headers: Http3Header[] = response.getHeaderFrame().getHeaders();
             const payload: Buffer = response.getPayload();
             const headerStrings: string[][] = headers.map((header) => {
                 return [header.name, header.value];
             });
     
-            console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
-            VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
 
             const mimeType: string | undefined = response.getHeaderFrame().getHeaderValue("Content-Type");
             if (mimeType !== undefined) {
@@ -69,7 +70,11 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
             ++finishedRequestCount;
 
             if( finishedRequestCount === startedRequestCount ){
-                VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount );
+                const endTime = new Date();
+                const plt = endTime.getTime() - startTime.getTime();
+                console.log("PLT:" + plt + "ms");
+
+                // VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount );
                 client.DEBUGgetQUICClient()!.close("'Well, I'm back,' he said.");
                 client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
                 
@@ -84,6 +89,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
 
         ++startedRequestCount;
         client.get("/index_with_subresources.html", authority, 16);
+        const startTime = new Date();
     } 
     // using the hardcoded lookup table for synthetic testing 
     else {
@@ -94,8 +100,8 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
                 return [header.name, header.value];
             });
     
-            console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
-            VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // console.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
+            // VerboseLogging.info("HTTP3 response on path '" + path + "'\nHeaders: " + headerStrings + "\nContent:\n" + payload.toString("utf8"));
     
             if( !lookupTable.resources[path] ){
                 VerboseLogging.error("Path does not exist! "  + JSON.stringify(lookupTable.resources, null, 4) + ":" + path);       
@@ -122,7 +128,7 @@ client.on(Http3ClientEvent.CLIENT_CONNECTED, () => {
 
             ++finishedRequestCount;
             if( finishedRequestCount === startedRequestCount ){
-                VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount + " === " + Object.keys(lookupTable.resources).length );
+                // VerboseLogging.info("All requests are fully done, ending this test run " + finishedRequestCount + " === " + startedRequestCount + " === " + Object.keys(lookupTable.resources).length );
                 client.DEBUGgetQlogger()!.close(); // nicely end our qlog json output
                 client.DEBUGgetQUICClient()!.close();
                 

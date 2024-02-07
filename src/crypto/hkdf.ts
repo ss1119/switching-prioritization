@@ -92,7 +92,7 @@ export class HKDF {
         */
         let hkdfLabel = Buffer.concat([hashLengthBuffer, Buffer.from([label.length]), labelBuffer, Buffer.from([0])]);
 
-        VerboseLogging.info("qhkdfExpandLabel: label from " + label + " // " + hkdfLabel.toString('hex') );
+        // VerboseLogging.info("qhkdfExpandLabel: label from " + label + " // " + hkdfLabel.toString('hex') );
         return this.expand(prk, hkdfLabel, hashLength);
     }
 }

@@ -43,7 +43,7 @@ export class PacketHandler {
 
     public handle(connection: Connection, packet: BasePacket, receivedTime: Time) {
         connection.getQlogger().onPacketRX(packet);
-        PacketLogging.getInstance().logIncomingPacket(connection, packet);
+        // PacketLogging.getInstance().logIncomingPacket(connection, packet);
 
         this.onPacketReceived(connection, packet, receivedTime);
 
@@ -98,7 +98,7 @@ export class PacketHandler {
             containsChosenVersion = containsChosenVersion || (version.toString() === connection.getInitialVersion().toString());
         });
         if (containsChosenVersion) {
-            VerboseLogging.info("PacketHandler:handleVNegPacket: packet contained our initially chosen version, ignoring..." + connection.getInitialVersion().toString());
+            // VerboseLogging.info("PacketHandler:handleVNegPacket: packet contained our initially chosen version, ignoring..." + connection.getInitialVersion().toString());
             return;
         }
 

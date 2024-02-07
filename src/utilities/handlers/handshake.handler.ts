@@ -104,7 +104,7 @@ export class HandshakeHandler extends EventEmitter{
                 VerboseLogging.error("HandshakeHandler:debugLogTLSMessage : unexpected EncryptionLevel : " + TLSMessageType[type] + " expects " + EncryptionLevel[expectedLevel] + " but we have " + EncryptionLevel[actualLevel] );
             }
             else{
-                VerboseLogging.debug("HandshakeHandler:debugLogTLSMessage : TLS Message " + TLSMessageType[type] + " will be sent at correct encryption level " + EncryptionLevel[actualLevel] );
+                // VerboseLogging.debug("HandshakeHandler:debugLogTLSMessage : TLS Message " + TLSMessageType[type] + " will be sent at correct encryption level " + EncryptionLevel[actualLevel] );
             }
         }
     }
@@ -178,10 +178,10 @@ export class HandshakeHandler extends EventEmitter{
         else{
             if( (this.isServer  && ("" + TLSKeyType[type]).indexOf("SERVER") >= 0) ||
                 (!this.isServer && ("" + TLSKeyType[type]).indexOf("CLIENT") >= 0) ){
-                VerboseLogging.info("HandshakeHandler: OnNewTLSKey : " + TLSKeyType[type] + " changed sending/encryption level from " + EncryptionLevel[previousLevel] + " to " + EncryptionLevel[this.currentSendingCryptoStream.getCryptoLevel()] );
+                // VerboseLogging.info("HandshakeHandler: OnNewTLSKey : " + TLSKeyType[type] + " changed sending/encryption level from " + EncryptionLevel[previousLevel] + " to " + EncryptionLevel[this.currentSendingCryptoStream.getCryptoLevel()] );
             }
-            else
-                VerboseLogging.info("HandshakeHandler: OnNewTLSKey : got decryption key of the other side : " + TLSKeyType[type] );
+            // else
+                // VerboseLogging.info("HandshakeHandler: OnNewTLSKey : got decryption key of the other side : " + TLSKeyType[type] );
         }
         
         //VerboseLogging.error("HandshakeHandler: OnNewTLSKey : actually set these keys on the encryption handlers!!!");

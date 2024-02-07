@@ -17,7 +17,7 @@ export class HttpHelper {
     }
 
     public handleRequest(data: Buffer): Buffer {
-        VerboseLogging.info("HttpHelper:handleRequest : " + data.toString() );
+        // VerboseLogging.info("HttpHelper:handleRequest : " + data.toString() );
         var request = this.parse(data);
         var file = resolve(__dirname) + "/../../../public" + request;
         if (!existsSync(file)) {

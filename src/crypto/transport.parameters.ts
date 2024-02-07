@@ -375,7 +375,7 @@ export class TransportParameters {
      */
     public static fromExtensionBuffer(isServer: boolean, buffer: Buffer): TransportParameters {
 
-        VerboseLogging.trace("TransportParameters:fromExtensionBuffer : " + buffer.toString("hex"));
+        // VerboseLogging.trace("TransportParameters:fromExtensionBuffer : " + buffer.toString("hex"));
 
         //let values: { [index: number]: any; } = [];
         let offset = 0;
@@ -399,7 +399,7 @@ export class TransportParameters {
                 
                 let tpIdString:TransportParameterId = ((<any>TransportParameterId)[tpIdNumber] as TransportParameterId);
                 let tpType:TransportParameterType = (<any>TransportParameterTypeLookup)[tpIdString] as TransportParameterType;
-                VerboseLogging.trace("fromExtensionBuffer: decoding " + TransportParameterId[tpIdNumber] + " with internal type " + TransportParameterType[tpType] );
+                // VerboseLogging.trace("fromExtensionBuffer: decoding " + TransportParameterId[tpIdNumber] + " with internal type " + TransportParameterType[tpType] );
     
                 if( transportParameters.tps.has(tpIdNumber) ){
                     VerboseLogging.error("fromExtensionBuffer: decoding : Duplicate TP detected " + TransportParameterId[tpIdNumber] + ". This MUST result in connection closure, but we don't do that yet!");
@@ -416,7 +416,7 @@ export class TransportParameters {
 
                         offset = decodedVarint.offset;
     
-                        VerboseLogging.trace("fromExtensionBuffer: adding uint64 " + TransportParameterId[tpIdNumber] + " = " + tpValue.toDecimalString());
+                        // VerboseLogging.trace("fromExtensionBuffer: adding uint64 " + TransportParameterId[tpIdNumber] + " = " + tpValue.toDecimalString());
                         
                         // FIXME: add support for Bignums (not just do everything as number!)
                         try{
@@ -431,7 +431,7 @@ export class TransportParameters {
                     break;
     
                     case TransportParameterType.boolean:
-                        VerboseLogging.trace("fromExtensionBuffer: adding boolean " + TransportParameterId[tpIdNumber] + " = " + true);
+                        // VerboseLogging.trace("fromExtensionBuffer: adding boolean " + TransportParameterId[tpIdNumber] + " = " + true);
                         transportParameters.tps.set( tpIdNumber, true );
                     break;
     
@@ -440,7 +440,7 @@ export class TransportParameters {
                         buffer.copy( tpBufValue, 0, offset, offset + valueLength );
                         offset = offset + valueLength;
 
-                        VerboseLogging.trace("fromExtensionBuffer: adding buffer " + TransportParameterId[tpIdNumber] + " = " + tpBufValue.toString('hex'));
+                        // VerboseLogging.trace("fromExtensionBuffer: adding buffer " + TransportParameterId[tpIdNumber] + " = " + tpBufValue.toString('hex'));
                         transportParameters.tps.set( tpIdNumber, tpBufValue );
                     break;
     
@@ -449,7 +449,7 @@ export class TransportParameters {
                         buffer.copy( tpCidValue, 0, offset, offset + valueLength );
                         offset = offset + valueLength;
 
-                        VerboseLogging.trace("fromExtensionBuffer: adding ConnectionID " + TransportParameterId[tpIdNumber] + " = " + tpCidValue.toString('hex'));
+                        // VerboseLogging.trace("fromExtensionBuffer: adding ConnectionID " + TransportParameterId[tpIdNumber] + " = " + tpCidValue.toString('hex'));
                         let cid = new ConnectionID( tpCidValue, valueLength );
                         transportParameters.tps.set( tpIdNumber, cid );
                     break;
@@ -461,7 +461,7 @@ export class TransportParameters {
                 buffer.copy( tpValue, 0, offset, offset + valueLength );
                 offset = offset + valueLength;
 
-                VerboseLogging.trace("fromExtensionBuffer: Unknown TP : " + tpIdNumber + " = " + tpValue.toString('hex'));
+                // VerboseLogging.trace("fromExtensionBuffer: Unknown TP : " + tpIdNumber + " = " + tpValue.toString('hex'));
                 transportParameters.unknownTps.set( tpIdNumber, tpValue );
             }
         }

@@ -188,7 +188,7 @@ export class CongestionControl extends EventEmitter {
                     if( DEBUGhighestReceivedNumber !== undefined )
                         DEBUGrxNumber = DEBUGhighestReceivedNumber.getValue().toNumber();
 
-                    VerboseLogging.info("CongestionControl:sendPackets : PN space \"" + PacketType[ packet.getPacketType() ] + "\" TX is now at " + pnSpace.DEBUGgetCurrent() + " (RX = " + DEBUGrxNumber + ")" );
+                    // VerboseLogging.info("CongestionControl:sendPackets : PN space \"" + PacketType[ packet.getPacketType() ] + "\" TX is now at " + pnSpace.DEBUGgetCurrent() + " (RX = " + DEBUGrxNumber + ")" );
                 }
 
                 let pktNumber = packet.getHeader().getPacketNumber();
@@ -263,7 +263,7 @@ export class CongestionControl extends EventEmitter {
                         */
                     }
                     else{
-                        VerboseLogging.info("CongestionControl:sendPackets : actually sending packet : #" + ( pktNumber ? pktNumber.getValue().toNumber() : "VNEG|RETRY") );
+                        // VerboseLogging.info("CongestionControl:sendPackets : actually sending packet : #" + ( pktNumber ? pktNumber.getValue().toNumber() : "VNEG|RETRY") );
                         this.connection.getSocket().send(packet.toBuffer(this.connection), this.connection.getRemoteInformation().port, this.connection.getRemoteInformation().address);
                     
                         this.onPacketSent(packet);
@@ -290,7 +290,7 @@ export class CongestionControl extends EventEmitter {
                         this.emit(CongestionControlEvents.PACKET_SENT, packet);
                     }
                     else{
-                        VerboseLogging.info("CongestionControl:sendPackets : actually sending packet : #" + ( pktNumber ? pktNumber.getValue().toNumber() : "VNEG|RETRY") );
+                        // VerboseLogging.info("CongestionControl:sendPackets : actually sending packet : #" + ( pktNumber ? pktNumber.getValue().toNumber() : "VNEG|RETRY") );
                         this.connection.getSocket().send(packet.toBuffer(this.connection), this.connection.getRemoteInformation().port, this.connection.getRemoteInformation().address);
                     
                         this.onPacketSent(packet);
@@ -299,7 +299,7 @@ export class CongestionControl extends EventEmitter {
                 }
                 else{
                     // NORMAL BEHAVIOUR
-                    VerboseLogging.info("CongestionControl:sendPackets : actually sending packet : #" + ( pktNumber ? pktNumber.getValue().toNumber() : "VNEG|RETRY") );
+                    // VerboseLogging.info("CongestionControl:sendPackets : actually sending packet : #" + ( pktNumber ? pktNumber.getValue().toNumber() : "VNEG|RETRY") );
                     this.connection.getSocket().send(packet.toBuffer(this.connection), this.connection.getRemoteInformation().port, this.connection.getRemoteInformation().address);
                 
                     this.onPacketSent(packet);    

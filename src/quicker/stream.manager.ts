@@ -83,7 +83,7 @@ export class StreamManager extends EventEmitter {
         var stream = new Stream(this.endpointType, streamId);
         this.addStream(stream);
 
-        VerboseLogging.info("StreamManager:initializeStream : starting stream " + streamId.toNumber() );
+        // VerboseLogging.info("StreamManager:initializeStream : starting stream " + streamId.toNumber() );
 
         this.applyDefaultFlowControlLimits(stream);
 
@@ -99,24 +99,24 @@ export class StreamManager extends EventEmitter {
 
         if( Stream.isBidiStreamId(streamId) ){
             if( isLocal ){ // bidi stream we are opening
-                VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : local bidi stream " + streamId.toNumber() + " : RX max " + this.flowControl.receive_our_bidi + ", TX max " + this.flowControl.send_our_bidi );
+                // VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : local bidi stream " + streamId.toNumber() + " : RX max " + this.flowControl.receive_our_bidi + ", TX max " + this.flowControl.send_our_bidi );
                 stream.setReceiveAllowance( this.flowControl.receive_our_bidi );
                 stream.setSendAllowance( this.flowControl.send_our_bidi );
             }
             else{ // bidi stream the peer opened
-                VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : remote bidi stream " + streamId.toNumber() + " : RX max " + this.flowControl.receive_their_bidi + ", TX max " + this.flowControl.send_their_bidi );
+                // VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : remote bidi stream " + streamId.toNumber() + " : RX max " + this.flowControl.receive_their_bidi + ", TX max " + this.flowControl.send_their_bidi );
                 stream.setReceiveAllowance( this.flowControl.receive_their_bidi );
                 stream.setSendAllowance( this.flowControl.send_their_bidi );
             }
         }
         else{ // unidirectional
             if( isLocal ){ // uni stream we are opening
-                VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : local uni stream " + streamId.toNumber() + " : RX max " + 0 + ", TX max " + this.flowControl.send_our_uni );
+                // VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : local uni stream " + streamId.toNumber() + " : RX max " + 0 + ", TX max " + this.flowControl.send_our_uni );
                 stream.setReceiveAllowance( 0 ); // cannot receive anything on a uni-stream we ourselves open
                 stream.setSendAllowance( this.flowControl.send_our_uni );
             }
             else{ // uni stream they are opening
-                VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : remote uni stream " + streamId.toNumber() + " : RX max " + this.flowControl.receive_their_uni + ", TX max " + 0 );
+                // VerboseLogging.info("StreamManager:applyDefaultFlowControlLimits : remote uni stream " + streamId.toNumber() + " : RX max " + this.flowControl.receive_their_uni + ", TX max " + 0 );
                 stream.setReceiveAllowance( this.flowControl.receive_their_uni );
                 stream.setSendAllowance( 0 ); // cannot send anything on a uni-stream the peer opened
             }

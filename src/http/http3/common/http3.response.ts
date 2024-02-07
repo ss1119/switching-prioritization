@@ -52,7 +52,7 @@ export class Http3Response {
             } else {
                 this.setStatus(200);
             }
-            VerboseLogging.info("Reading file: " + absoluteFilePath);
+            // VerboseLogging.info("Reading file: " + absoluteFilePath);
 
             dataFrame = new Http3DataFrame(readFileSync(absoluteFilePath));
             this.setHeaderValue("content-length", dataFrame.getEncodedLength().toString());

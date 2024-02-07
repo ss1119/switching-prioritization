@@ -22,6 +22,8 @@
   "homepage": "https://github.com/ss1119/switching-prioritization#readme",
   "devDependencies": {
     "@types/node": "^8.10.40",
+    "@types/ping": "^0.4.1",
+    "ping": "^0.4.4",
     "typescript": "^2.8.3"
   },
   "dependencies": {

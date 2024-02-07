@@ -143,7 +143,7 @@ export class LongHeader extends BaseHeader {
             */
             let pnLength = this.truncatedPacketNumber!.getValue().getByteLength(); 
 
-            VerboseLogging.info("LongHeader:toBuffer : pnLength is " + pnLength + " // " + this.truncatedPacketNumber!.getValue().toNumber());
+            // VerboseLogging.info("LongHeader:toBuffer : pnLength is " + pnLength + " // " + this.truncatedPacketNumber!.getValue().toNumber());
             if( pnLength > 4 ){
                 VerboseLogging.error("LongHeader:toBuffer : packet number length is larger than 4 bytes, not supported");
                 throw new QuicError(ConnectionErrorCodes.PROTOCOL_VIOLATION, "packet number too long");

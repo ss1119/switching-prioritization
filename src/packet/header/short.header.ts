@@ -98,7 +98,7 @@ export class ShortHeader extends BaseHeader {
 
         let pnLength = this.truncatedPacketNumber!.getValue().getByteLength(); 
 
-        VerboseLogging.info("ShortHeader:getFirstByte : pnLength is " + pnLength + " // " + this.truncatedPacketNumber!.getValue().toNumber());
+        // VerboseLogging.info("ShortHeader:getFirstByte : pnLength is " + pnLength + " // " + this.truncatedPacketNumber!.getValue().toNumber());
         if( pnLength > 4 ){
             VerboseLogging.error("ShortHeader:getFirstByte : packet number length is larger than 4 bytes, not supported");
             throw new QuicError(ConnectionErrorCodes.PROTOCOL_VIOLATION, "packet number too long");

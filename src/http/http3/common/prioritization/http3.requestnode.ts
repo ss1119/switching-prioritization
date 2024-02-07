@@ -33,10 +33,10 @@ export class Http3RequestNode extends Http3PrioritisedElementNode {
             this.stream.getConnection().sendPackets(); // Force sending packets
             this.bytesSent = sendBuffer.byteLength;
             this.stream.getConnection().getQlogger().onHTTPDataChunk(this.stream.getStreamId(), this.bytesSent, this.weight, "TX");
-            VerboseLogging.info("Scheduled " + this.bytesSent + " bytes to be sent on stream " + this.stream.getStreamId().toString());
+            // VerboseLogging.info("Scheduled " + this.bytesSent + " bytes to be sent on stream " + this.stream.getStreamId().toString());
             if (this.allDataBuffered === true && this.bufferedData.byteLength === 0) {
                 this.stream.getConnection().getQlogger().onHTTPStreamStateChanged(this.stream.getStreamId(), Http3StreamState.MODIFIED, "HALF_CLOSED");
-                VerboseLogging.info("Closed stream " + this.stream.getStreamId().toString() + ", all data transmitted");
+                // VerboseLogging.info("Closed stream " + this.stream.getStreamId().toString() + ", all data transmitted");
                 setTimeout(() => {
                     this.terminate(); // FIXME This pruning is way too aggressive and not spec compliant (should wait at least 2 RTT)
                 }, 500);

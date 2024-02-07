@@ -23,7 +23,7 @@ Constants.ALPN_LABELS = Constants.ALPN_VALID_HTTP09;
 
 Constants.LOG_FILE_NAME = "server.log";
 
-VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
+// VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
 
 var httpHelper = new HttpHelper();
 var server = Server.createServer({
@@ -53,17 +53,17 @@ server.on(QuickerEvent.ERROR, (error: Error) => {
 
 server.on(QuickerEvent.CONNECTION_DRAINING, (connectionSrcId: string) => {
     
-    VerboseLogging.debug("--------------------------------------------------------------------------------------------------");
-    VerboseLogging.debug("connection with connectionSrcID " + connectionSrcId + " is draining");
-    VerboseLogging.debug("First printing packets for InitialDestConnectionID (server doesn't know our real SrcID yet), and then for the real SrcID):"); 
+    // VerboseLogging.debug("--------------------------------------------------------------------------------------------------");
+    // VerboseLogging.debug("connection with connectionSrcID " + connectionSrcId + " is draining");
+    // VerboseLogging.debug("First printing packets for InitialDestConnectionID (server doesn't know our real SrcID yet), and then for the real SrcID):"); 
     PacketLogging.getInstance().logPacketStats( server.getConnectionManager().getConnectionByStringID(connectionSrcId).getInitialDestConnectionID().toString() );
     PacketLogging.getInstance().logPacketStats(connectionSrcId); 
 
 	console.log("=> EXPECTED: RX 1 INITIAL (+ possibly 2 0-RTT first), then TX 1 INITIAL, 1-2 HANDSHAKE, 5-7 Protected1RTT, then RX 1 HANDSHAKE, 5-7 Protected1RTT\n");
 
-    VerboseLogging.debug("Connection allowed early data: " + server.getConnectionManager().getConnectionByStringID(connectionSrcId).getQuicTLS().isEarlyDataAllowed() + " == true" );
-    VerboseLogging.debug("Connection was re-used:        " + server.getConnectionManager().getConnectionByStringID(connectionSrcId).getQuicTLS().isSessionReused() + " == 1st false, 2nd true" );
-    VerboseLogging.debug("Connection handshake state:    " + HandshakeState[server.getConnectionManager().getConnectionByStringID(connectionSrcId).getQuicTLS().getHandshakeState()] + " == COMPLETED" );
+    // VerboseLogging.debug("Connection allowed early data: " + server.getConnectionManager().getConnectionByStringID(connectionSrcId).getQuicTLS().isEarlyDataAllowed() + " == true" );
+    // VerboseLogging.debug("Connection was re-used:        " + server.getConnectionManager().getConnectionByStringID(connectionSrcId).getQuicTLS().isSessionReused() + " == 1st false, 2nd true" );
+    // VerboseLogging.debug("Connection handshake state:    " + HandshakeState[server.getConnectionManager().getConnectionByStringID(connectionSrcId).getQuicTLS().getHandshakeState()] + " == COMPLETED" );
 
 });
 

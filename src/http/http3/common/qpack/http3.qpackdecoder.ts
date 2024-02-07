@@ -80,7 +80,7 @@ export class Http3QPackDecoder {
     private setupEncoderStreamEvents(initialBuffer?: Buffer) {
         if (this.peerEncoderStream !== undefined) {
             if (initialBuffer !== undefined && initialBuffer.byteLength > 0) {
-                VerboseLogging.info("Passing buffer with initial QPACK encoderstream data to decoder with ID <" + this.decoderID + ">.");
+                // VerboseLogging.info("Passing buffer with initial QPACK encoderstream data to decoder with ID <" + this.decoderID + ">.");
                 this.logger.onQPACKEncoderInstruction(this.peerEncoderStream.getStreamId(), initialBuffer, "RX");
                 decoderEncoderStreamData({
                     decoderID: this.decoderID,
@@ -89,7 +89,7 @@ export class Http3QPackDecoder {
             }
             this.peerEncoderStream.on(QuickerEvent.STREAM_DATA_AVAILABLE, (newData: Buffer) => {
                 // Consume data
-                VerboseLogging.info("Passing buffer with QPACK encoderstream data to decoder with ID <" + this.decoderID + ">.");
+                // VerboseLogging.info("Passing buffer with QPACK encoderstream data to decoder with ID <" + this.decoderID + ">.");
                 if (this.peerEncoderStream !== undefined) {
                     this.logger.onQPACKEncoderInstruction(this.peerEncoderStream.getStreamId(), newData, "RX");
                 }

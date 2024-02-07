@@ -21,12 +21,12 @@ import { Http3RequestMetadata } from "../client/http3.requestmetadata";
 // const resourceListName: string | undefined = process.argv[6] || undefined;
 // const resourceList: {[path: string]: Http3RequestMetadata} | undefined = resourceListName === undefined ? undefined : JSON.parse(readFileSync(resourceListName, "utf-8")).resources;
 
-const schemeName = undefined;
+const schemeName: string | undefined = process.argv[2] || undefined;
 const resourceList = undefined;
-let host = process.argv[2] || "0.0.0.0";
-let port = parseInt(process.argv[3]) || 4433;
-let key  = process.argv[4] || "../../../../../keys/selfsigned_default.key";
-let cert = process.argv[5] || "../../../../../keys/selfsigned_default.crt";
+let host = "0.0.0.0";
+let port = parseInt(process.argv[3]) || 4434;
+let key  = "../../../../../keys/selfsigned_default.key";
+let cert = "../../../../../keys/selfsigned_default.crt";
 
 if (isNaN(Number(port))) {
     console.log("port must be a number: node ./main.js 127.0.0.1 4433 ca.key ca.cert");
@@ -35,9 +35,9 @@ if (isNaN(Number(port))) {
 
 Constants.LOG_FILE_NAME = "server.log";
 
-VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert);
+VerboseLogging.info("Running QUICker server at " + host + ":" + port + ", with certs: " + key + ", " + cert + ", schemeName: " + schemeName);
 
-let server: Http3Server = new Http3Server(resolve(__dirname + key), resolve(__dirname + cert), "rr", resourceList);
+let server: Http3Server = new Http3Server(resolve(__dirname + key), resolve(__dirname + cert), schemeName, resourceList);
 server.listen(port, host);
 
 console.log("HTTP/3 server listening on port "+ host +":"+ port +", log level " + Constants.LOG_LEVEL);

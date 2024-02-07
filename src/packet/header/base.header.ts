@@ -55,7 +55,7 @@ export abstract class BaseHeader {
         this.packetNumber = fullPacketNumber;
         this.truncatedPacketNumber = fullPacketNumber.truncate( largestAcknowledgedPacketNumber );
 
-        VerboseLogging.info("BaseHeader:setPacketNumber: " + fullPacketNumber.getValue().toDecimalString() + " // " + this.truncatedPacketNumber!.getValue().toDecimalString() + "@ " + this.truncatedPacketNumber!.getValue().getByteLength() );
+        // VerboseLogging.info("BaseHeader:setPacketNumber: " + fullPacketNumber.getValue().toDecimalString() + " // " + this.truncatedPacketNumber!.getValue().toDecimalString() + "@ " + this.truncatedPacketNumber!.getValue().getByteLength() );
     }
 
     public getTruncatedPacketNumber(): PacketNumber | undefined {
@@ -66,7 +66,7 @@ export abstract class BaseHeader {
         this.truncatedPacketNumber = truncatedPacketNumber;
         this.packetNumber = truncatedPacketNumber.restoreFromTruncate( largestAcknowledgedPacketNumber );
 
-        VerboseLogging.info("BaseHeader:setTruncatedPacketNumber: " + truncatedPacketNumber.getValue().toDecimalString() + " // " + this.packetNumber!.getValue().toDecimalString() + "@ " + this.packetNumber!.getValue().getByteLength() );
+        // VerboseLogging.info("BaseHeader:setTruncatedPacketNumber: " + truncatedPacketNumber.getValue().toDecimalString() + " // " + this.packetNumber!.getValue().toDecimalString() + "@ " + this.packetNumber!.getValue().getByteLength() );
     }
 
     public getHeaderType() {

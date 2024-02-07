@@ -29,7 +29,7 @@ export class TestHeaderProtection  {
 
         let result1 = update.slice(0, 5).toString("hex") === "0ed450ec84";
 
-        VerboseLogging.info("update : " + update.slice(0, 5).toString("hex") + " ?= 0ed450ec840000000000000000000000");
+        // VerboseLogging.info("update : " + update.slice(0, 5).toString("hex") + " ?= 0ed450ec840000000000000000000000");
 
 
         // mask=cbfad5503c0000003c75ff1fa67f0000 sample=e909e8173a59d4567b99c1d7798fbad1
@@ -42,7 +42,7 @@ export class TestHeaderProtection  {
 
         let result2 = update.slice(0, 5).toString("hex") === "cbfad5503c";
 
-        VerboseLogging.info("update : " + update.slice(0, 5).toString("hex") + " ?= cbfad5503c");
+        // VerboseLogging.info("update : " + update.slice(0, 5).toString("hex") + " ?= cbfad5503c");
 
 
         // mask=0931f128540000009c3530c7fc7f0000 sample=77209a5092c9bd1ed32d9caf8ed30d6e
@@ -55,7 +55,7 @@ export class TestHeaderProtection  {
 
         let result3 = update.slice(0, 5).toString("hex") === "0931f12854";
 
-        VerboseLogging.info("update : " + update.slice(0, 5).toString("hex") + " ?= 0931f12854");
+        // VerboseLogging.info("update : " + update.slice(0, 5).toString("hex") + " ?= 0931f12854");
 
 
         return result1 && result2 && result3;

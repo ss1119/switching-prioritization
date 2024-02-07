@@ -156,7 +156,7 @@ export class Http3Client extends EventEmitter {
                     } catch(error) {
                         // Do nothing if there was not enough data to decode the StreamType
                         if (error instanceof RangeError) {
-                            VerboseLogging.info("Not enough data buffered to decode HTTP/3 StreamType. Waiting until more data arrives.");
+                            // VerboseLogging.info("Not enough data buffered to decode HTTP/3 StreamType. Waiting until more data arrives.");
                         } else {
                             throw error;
                         }
@@ -222,7 +222,7 @@ export class Http3Client extends EventEmitter {
 
         this.lastStreamID = stream.getStreamId();
         this.pendingRequestStreams.push(stream);
-        VerboseLogging.info("Created new stream for HTTP/3 GET request. StreamID: " + stream.getStreamId());
+        // VerboseLogging.info("Created new stream for HTTP/3 GET request. StreamID: " + stream.getStreamId());
 
         // TODO move logging to deptree because not all data will be sent instantly
         if (this.logger !== undefined) {
@@ -314,21 +314,21 @@ export class Http3Client extends EventEmitter {
                 this.logger.onHTTPFrame_Priority(frame, "RX");
             }
             this.prioritiser.handlePriorityFrame(frame, controlStream.getStreamID());
-            VerboseLogging.info("HTTP/3: priority frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: priority frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
         });
         controlStream.on(Http3ControlStreamEvent.HTTP3_CANCEL_PUSH_FRAME, (frame: Http3CancelPushFrame) => {
             // TODO
-            VerboseLogging.info("HTTP/3: cancel push frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString() + " - Cancelled PushID: " + frame.getPushID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: cancel push frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString() + " - Cancelled PushID: " + frame.getPushID().toDecimalString());
         });
         controlStream.on(Http3ControlStreamEvent.HTTP3_SETTINGS_FRAME, (frame: Http3SettingsFrame) => {
             // TODO
             if (this.logger !== undefined) {
                 this.logger.onHTTPFrame_Settings(frame, "RX");
             }
-            VerboseLogging.info("HTTP/3: settings frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: settings frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
         });
         controlStream.on(Http3ControlStreamEvent.HTTP3_GOAWAY_FRAME, (frame: Http3GoAwayFrame) => {
-            VerboseLogging.info("HTTP/3: goaway frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString() + " - MaxStreamID: " + frame.getStreamID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: goaway frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString() + " - MaxStreamID: " + frame.getStreamID().toDecimalString());
             this.terminateConnection = true;
             this.pendingRequestStreams.filter((stream) => {
                 if (stream.getStreamId().greaterThanOrEqual(frame.getStreamID())) {
@@ -340,7 +340,7 @@ export class Http3Client extends EventEmitter {
             });
         });
         controlStream.on(Http3ControlStreamEvent.HTTP3_MAX_PUSH_ID, (frame: Http3MaxPushIDFrame) => {
-            VerboseLogging.info("HTTP/3: max push id frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: max push id frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
             throw new Http3Error(Http3ErrorCode.HTTP_UNEXPECTED_FRAME, "Received an HTTP/3 MAX_PUSH_ID frame on client control stream. This is not allowed. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
         });
     }

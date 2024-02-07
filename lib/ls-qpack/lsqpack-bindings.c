@@ -62,7 +62,7 @@ napi_value testBindings(napi_env env, napi_callback_info info) {
         return NULL;
     }
 
-    printf("You passed the following string to the native library: `%s`\n", string_buf);
+    // printf("You passed the following string to the native library: `%s`\n", string_buf);
 
     status = napi_create_string_utf8(env, string_buf, 256, &ret);
 
@@ -152,9 +152,9 @@ napi_value createEncoder(napi_env env, napi_callback_info info) {
     return encoderID;
 }
 
-void hblock_unblocked(void * hblock) {
-    printf("\n\n\nLSQPACK CALLBACK TRIGGERED: HBLOCK_UNBLOCKED\n\n\n");
-}
+// void hblock_unblocked(void * hblock) {
+//     printf("\n\n\nLSQPACK CALLBACK TRIGGERED: HBLOCK_UNBLOCKED\n\n\n");
+// }
 
 /* Args: Object
     {
@@ -349,17 +349,17 @@ napi_value encodeHeaders(napi_env env, napi_callback_info info) {
 
         enum lsqpack_enc_status encode_status = lsqpack_enc_encode(encoders[encoderID], tmp_enc_buf, &enc_sz, tmp_header_buf, &header_sz, headers[i].name, headers[i].name_len, headers[i].value, headers[i].value_len, 0 /*FIXME find out what this is*/);
 
-        switch (encode_status) {
-            case LQES_OK:
-                printf("Encoding of header %u went ok\n", (unsigned) i);
-                break;
-            case LQES_NOBUF_ENC:
-                printf("Encoding of header %u ended with error LQES_NOBUF_ENC\n", (unsigned) i);
-                break;
-            case LQES_NOBUF_HEAD:
-                printf("Encoding of header %u ended with error LQES_NOBUF_HEAD\n", (unsigned) i);
-                break;
-        }
+        // switch (encode_status) {
+        //     case LQES_OK:
+        //         printf("Encoding of header %u went ok\n", (unsigned) i);
+        //         break;
+        //     case LQES_NOBUF_ENC:
+        //         printf("Encoding of header %u ended with error LQES_NOBUF_ENC\n", (unsigned) i);
+        //         break;
+        //     case LQES_NOBUF_HEAD:
+        //         printf("Encoding of header %u ended with error LQES_NOBUF_HEAD\n", (unsigned) i);
+        //         break;
+        // }
 
         // Increase allocated memory
         enc_buf = realloc(enc_buf, total_enc_sz+enc_sz);
@@ -391,15 +391,15 @@ napi_value encodeHeaders(napi_env env, napi_callback_info info) {
         return NULL;
     }
 
-    printf("Prefix size: %lu\nTotal header size: %lu\nTotal encoder size: %lu\n", prefix_sz, total_header_sz, total_enc_sz);
+    // printf("Prefix size: %lu\nTotal header size: %lu\nTotal encoder size: %lu\n", prefix_sz, total_header_sz, total_enc_sz);
 
-    for (size_t i = 0; i < total_header_sz; ++i) {
-        printf("header_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(header_buf[i]));
-    }
+    // for (size_t i = 0; i < total_header_sz; ++i) {
+    //     printf("header_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(header_buf[i]));
+    // }
     
-    for (size_t i = 0; i < total_enc_sz; ++i) {
-        printf("encoder_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(enc_buf[i]));
-    }
+    // for (size_t i = 0; i < total_enc_sz; ++i) {
+    //     printf("encoder_buffer[%u]: "BYTE_TO_BINARY_PATTERN"\n", (unsigned) i, BYTE_TO_BINARY(enc_buf[i]));
+    // }
     
     void * header_buffer;
     void * encoder_buffer;
@@ -425,8 +425,8 @@ napi_value encodeHeaders(napi_env env, napi_callback_info info) {
     status = napi_set_element(env, ret, 0, header_buffer_napi_value);
     status |= napi_set_element(env, ret, 1, encoder_buffer_napi_value);
 
-    memcpy(header_buffer, header_data_prefix, prefix_sz);
-    memcpy(header_buffer+prefix_sz, header_buf, total_header_sz);
+    // memcpy(header_buffer, header_data_prefix, prefix_sz);
+    // memcpy(header_buffer+prefix_sz, header_buf, total_header_sz);
     
     memcpy(encoder_buffer, enc_buf, total_enc_sz);
     
@@ -439,7 +439,7 @@ napi_value encodeHeaders(napi_env env, napi_callback_info info) {
     free(enc_buf);
     free(header_buf);
     
-    printf("Dynamic table insertion count: %u\n", encoders[encoderID]->qpe_ins_count);
+    // printf("Dynamic table insertion count: %u\n", encoders[encoderID]->qpe_ins_count);
 
     return ret;
 }
@@ -515,29 +515,29 @@ napi_value decodeHeaders(napi_env env, napi_callback_info info) {
         return NULL;
     }
     
-    printf("Decoding QPack headers: \n\tdecoderID: %u\n\tstreamID: %u\n", decoderID, streamID);
+    // printf("Decoding QPack headers: \n\tdecoderID: %u\n\tstreamID: %u\n", decoderID, streamID);
 
     uint64_t biggerID = (uint64_t) streamID;
     enum lsqpack_read_header_status read_status = lsqpack_dec_header_in(decoders[decoderID], NULL,  biggerID, header_buffer_sz, (const unsigned char**) &header_buffer, header_buffer_sz, &hset, dec_buf, &dec_buf_sz);
 
-    switch (read_status) {
-        case LQRHS_DONE:
-            printf("Decoder successfully decoded block\n");
-            break;
-        case LQRHS_NEED:
-            printf("Decoder needs more data\n");
-            break;
-        case LQRHS_BLOCKED:
-            printf("Decoder blocked\n");
-            break;
-        case LQRHS_ERROR:
-            napi_throw_error(env, NULL, "Decoding headers returned LQRHS_ERROR statuscode in 'decodeHeaders' call.");
-            return NULL;
-    }
+    // switch (read_status) {
+    //     case LQRHS_DONE:
+    //         printf("Decoder successfully decoded block\n");
+    //         break;
+    //     case LQRHS_NEED:
+    //         printf("Decoder needs more data\n");
+    //         break;
+    //     case LQRHS_BLOCKED:
+    //         printf("Decoder blocked\n");
+    //         break;
+    //     case LQRHS_ERROR:
+    //         napi_throw_error(env, NULL, "Decoding headers returned LQRHS_ERROR statuscode in 'decodeHeaders' call.");
+    //         return NULL;
+    // }
     
-    printf("\n\nPrinting decoder table...\n");
-    lsqpack_dec_print_table(decoders[decoderID], stdout);
-    printf("\n\n");
+    // printf("\n\nPrinting decoder table...\n");
+    // lsqpack_dec_print_table(decoders[decoderID], stdout);
+    // printf("\n\n");
     
     if (hset != NULL) {
         // Push results into return value
@@ -551,7 +551,7 @@ napi_value decodeHeaders(napi_env env, napi_callback_info info) {
         napi_create_array_with_length(env, 2, &ret); // [decodedHeaders, decoderStreamData]
         napi_create_array_with_length(env, hset->qhs_count, &decompressed_headers);
         
-        printf("Header count: %u\n", hset->qhs_count);
+        // printf("Header count: %u\n", hset->qhs_count);
     
         for (size_t i = 0; i < hset->qhs_count; ++i) {
             napi_value header_object;
@@ -566,7 +566,7 @@ napi_value decodeHeaders(napi_env env, napi_callback_info info) {
             
             napi_set_element(env, decompressed_headers, i, header_object);
             
-            printf("Header[%lu]: \nName: %.*s\nValue: %.*s\n", i, hset->qhs_headers[i]->qh_name_len, hset->qhs_headers[i]->qh_name, hset->qhs_headers[i]->qh_value_len, hset->qhs_headers[i]->qh_value);
+            // printf("Header[%lu]: \nName: %.*s\nValue: %.*s\n", i, hset->qhs_headers[i]->qh_name_len, hset->qhs_headers[i]->qh_name, hset->qhs_headers[i]->qh_value_len, hset->qhs_headers[i]->qh_value);
         }
         
         napi_create_buffer(env, dec_buf_sz, &dec_buf_napi, &decoder_stream_data);
@@ -577,7 +577,7 @@ napi_value decodeHeaders(napi_env env, napi_callback_info info) {
         
         return ret;
     } else {
-        printf("Header set is NULL\n");
+        // printf("Header set is NULL\n");
         napi_throw_error(env, NULL, "QPACK: Header set is null while decoding headers in 'decodeHeaders' call.");
         return NULL;
     }
@@ -644,9 +644,9 @@ napi_value decoderEncoderStreamData(napi_env env, napi_callback_info info) {
         return NULL;
     }
     
-    printf("\n\nPrinting decoder table after encoderstream data...\n");
-    lsqpack_dec_print_table(decoders[decoderID], stdout);
-    printf("\n\n");
+    // printf("\n\nPrinting decoder table after encoderstream data...\n");
+    // lsqpack_dec_print_table(decoders[decoderID], stdout);
+    // printf("\n\n");
     
     return NULL;
 }
@@ -735,7 +735,7 @@ napi_value deleteEncoder(napi_env env, napi_callback_info info) {
 
     // Free the encoder
     if (encoderID < MAX_ENCODERS && encoders[encoderID] != NULL) {
-        printf("Freeing encoder with ID <%u>\n", encoderID);
+        // printf("Freeing encoder with ID <%u>\n", encoderID);
         lsqpack_enc_cleanup(encoders[encoderID]);
         free(encoders[encoderID]);
         encoders[encoderID] = NULL;
@@ -765,7 +765,7 @@ napi_value deleteDecoder(napi_env env, napi_callback_info info) {
 
     // Free the decoder
     if (decoderID < MAX_DECODERS && decoders[decoderID] != NULL) {
-        printf("Freeing decoder with ID <%u>\n", decoderID);
+        // printf("Freeing decoder with ID <%u>\n", decoderID);
         lsqpack_dec_cleanup(decoders[decoderID]);
         free(decoders[decoderID]);
         decoders[decoderID] = NULL;

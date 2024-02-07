@@ -37,7 +37,7 @@ export class HeaderParser {
 
 
         let globalOffset: number = packet.fullContents.byteLength; // points right after the first packet
-        VerboseLogging.info("HeaderParser:parseShallowHeader : after first header : " + packet.fullContents.byteLength + ". Left: " + (encryptedHeaders.byteLength - packet.fullContents.byteLength) + ", globalOffset " + globalOffset + " // full length:" + encryptedHeaders.byteLength);
+        // VerboseLogging.info("HeaderParser:parseShallowHeader : after first header : " + packet.fullContents.byteLength + ". Left: " + (encryptedHeaders.byteLength - packet.fullContents.byteLength) + ", globalOffset " + globalOffset + " // full length:" + encryptedHeaders.byteLength);
         // REFACTOR TODO: second condition here should never happen, should throw error message if we encounter this! 
         while (packet.header.getHeaderType() === HeaderType.LongHeader && (<LongHeader>(packet.header)).getPayloadLength() !== undefined) {
             
@@ -98,7 +98,7 @@ export class HeaderParser {
 
         let type = firstByte >> 4; // with the highest 2 bits removed above, we just drop the 4 rightmost ones to just keep the 2 type bits
 
-        VerboseLogging.debug("HeaderParser:parseLongHeader: type " + type + " // " + LongHeaderType[type] );
+        // VerboseLogging.debug("HeaderParser:parseLongHeader: type " + type + " // " + LongHeaderType[type] );
 
         if( type === LongHeaderType.Retry ){
             VerboseLogging.error("headerParser:parseLongHeader : parsing a Retry packet, isn't supported yet! (ODCIL length in first byte)");
@@ -247,7 +247,7 @@ export class HeaderParser {
 
         let restLength = encryptedPacket.byteLength - offset;
 
-        VerboseLogging.info("HeaderParser:parseShortHeader 0x" + firstByte.toString(16) + ", " + destConnectionID.toBuffer().toString('hex') + " -> rest " + restLength + " started at : " + startOffset + ", now at " + offset + " // total Length : " + encryptedPacket.byteLength);
+        // VerboseLogging.info("HeaderParser:parseShortHeader 0x" + firstByte.toString(16) + ", " + destConnectionID.toBuffer().toString('hex') + " -> rest " + restLength + " started at : " + startOffset + ", now at " + offset + " // total Length : " + encryptedPacket.byteLength);
  
         // the offset is now right behind the "length" field, so EXCLUDING the packet number and the payload
         // adding the restLength to it gives us the end of the packet

@@ -30,6 +30,7 @@ import { Constants } from "../../../utilities/constants";
 import { HttpHelper } from "../../http0.9/http.helper";
 import { QuicError } from "../../../utilities/errors/connection.error";
 import { ConnectionErrorCodes } from "../../../utilities/errors/quic.codes";
+import ping from 'ping';
 
 class ClientState {
     private logger: QlogWrapper;
@@ -171,6 +172,14 @@ export class Http3Server {
 
     private resourceList?: {[path: string]: Http3RequestMetadata};
 
+    private isFirstConnection: boolean;         // クライアントとの最初のコネクションかどうか
+    private isSchemeChangeDone: boolean;        // Schemeの変更が完了したかどうか
+    private packetLossRate: number;             // パケットロス率
+    private sentPackets: number;                // 送信したパケット数
+    private receivedPackets: number;            // 受信したICMPパケットの数
+    private totalLatency: number;               // 通信遅延の合計
+    private latency: number;                    // 通信遅延    
+
     // Separate from connectionState as they are kept for 0RTT connections
     // private connectionSettings: Map<string, Http3Setting[]> = new Map<string, Http3Setting[]>();
     // Tracks for each connection if the 
@@ -192,6 +201,14 @@ export class Http3Server {
         }
         this.prioritizationSchemeName = prioritizationSchemeName;
         this.resourceList = resourceList;
+
+        this.isFirstConnection = true;
+        this.isSchemeChangeDone = true;
+        this.packetLossRate = 0;
+        this.sentPackets = 0;
+        this.receivedPackets = 0;
+        this.totalLatency = 0;
+        this.latency = 0;
 
         this.quickerServer.on(QuickerEvent.NEW_STREAM, this.onNewStream);
         this.quickerServer.on(QuickerEvent.CONNECTION_CLOSE, this.closeConnection);
@@ -269,7 +286,7 @@ export class Http3Server {
                 throw new Error("Client state could not succesfully be created or added to the clientstate map!");
             }
 
-            VerboseLogging.info("DEBUG: A new HTTP/3 client has connected!");
+            // VerboseLogging.info("DEBUG: A new HTTP/3 client has connected!");
         }
         else if(ALPN && Constants.ALPN_VALID_HTTP09.indexOf(ALPN) >= 0 ){
 
@@ -278,15 +295,15 @@ export class Http3Server {
             ));
 
 
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("DEBUG: A new HTTP/0.9 client has connected!");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("DEBUG: A new HTTP/0.9 client has connected!");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            // VerboseLogging.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         }    
         else{
             // invalid ALPN: shutting down
@@ -310,11 +327,41 @@ export class Http3Server {
         controlStream.on(Http3ControlStreamEvent.HTTP3_PRIORITY_FRAME, (frame: Http3PriorityFrame) => {
             logger.onHTTPFrame_Priority(frame, "RX");
             h3State.getPrioritiser().handlePriorityFrame(frame, controlStream.getStreamID());
-            VerboseLogging.info("HTTP/3: priority frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
+            // VerboseLogging.info("HTTP/3: priority frame received on client-sided control stream. ControlStreamID: " + controlStream.getStreamID().toDecimalString());
         });
     }
 
     private onNewStream(quicStream: QuicStream) {
+        if (this.isFirstConnection) {
+            const connection = quicStream.getConnection();
+            const clientInfo = connection.getRemoteInformation();
+            console.log("クライアントのIPアドレス:" + clientInfo.address);
+            this.pingClient(clientInfo.address);
+            this.isFirstConnection = false;
+        }
+
+        if (!this.isSchemeChangeDone){
+        // ネットワーク環境ごとにthis.prioritizationSchemeNameを変更する
+        console.log(`after:通信遅延: ${this.latency}`);
+        console.log(`after:パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+        if (this.latency >= 50 && this.packetLossRate >= 1) {
+            this.prioritizationSchemeName = "dfifo";
+            console.log(`this.latency >= 50 && this.packetLossRate >= 1で，dfifoが選択されました`);
+            } else if(this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3){
+            this.prioritizationSchemeName = "dfifo";
+            console.log(`this.latency < 50 && this.latency >= 30 && this.packetLossRate >= 3で，dfifoが選択されました`);
+            } else if(this.latency < 30 && this.packetLossRate >= 4) {
+            this.prioritizationSchemeName = "dfifo";
+            console.log(`this.latency < 30 && this.packetLossRate >= 4で，dfifoが選択されました`);
+            } else {
+            this.prioritizationSchemeName = "rr";
+            console.log(`rrが選択されました`);
+            }
+            this.isSchemeChangeDone = true;
+        }
+
+
+
         const connectionID: string = quicStream.getConnection().getSrcConnectionID().toString();
         let clientState: ClientState | ClientState09 | undefined = this.connectionStates.get(connectionID);
         const logger: QlogWrapper = quicStream.getConnection().getQlogger();
@@ -400,7 +447,7 @@ export class Http3Server {
                         } catch(error) {
                             // Do nothing if there was not enough data to decode the StreamType
                             if (error instanceof RangeError) {
-                                VerboseLogging.info("Not enough data buffered to decode StreamType. Waiting until more data arrives.");
+                                // VerboseLogging.info("Not enough data buffered to decode StreamType. Waiting until more data arrives.");
                             } else {
                                 throw error;
                             }
@@ -467,7 +514,7 @@ export class Http3Server {
         }
 
         if (requestPath === undefined || method === undefined) {
-            VerboseLogging.info("Received HTTP/3 request with no path and/or method");
+            // VerboseLogging.info("Received HTTP/3 request with no path and/or method");
             state.getPrioritiser().finishStream(quicStream.getStreamId());
         } else {
             let methodHandled: boolean = false;
@@ -478,9 +525,9 @@ export class Http3Server {
                     if (this.handledGetPaths[requestPath] !== undefined) {
                         // Call user function to fill response
                         this.handledGetPaths[requestPath](req, res);
-                        VerboseLogging.info("Request was handled by the server. Responding to HTTP/3 Request.");
+                        // VerboseLogging.info("Request was handled by the server. Responding to HTTP/3 Request.");
                     } else {
-                        VerboseLogging.info("Requested path '" + requestPath + "' has no specific handler. Trying to respond with requested file...");
+                        // VerboseLogging.info("Requested path '" + requestPath + "' has no specific handler. Trying to respond with requested file...");
                         res.sendFile(requestPath);
                     }
                     break;
@@ -515,7 +562,7 @@ export class Http3Server {
 
         if( state instanceof ClientState ){
             state.stopScheduler(); // Immediately stops pushing new data over connection
-            VerboseLogging.info("Stopping server scheduler...");
+            // VerboseLogging.info("Stopping server scheduler...");
             state.getQPackEncoder().close();
             state.getQPackDecoder().close();
             const sendingControlStream: Http3SendingControlStream = state.getSendingControlStream();
@@ -537,5 +584,34 @@ export class Http3Server {
     private onQuicServerError(error: Error) {
         VerboseLogging.error("main:onError : " + error.message + " -- " + JSON.stringify(error));
         console.error(error.stack);
+    }
+
+    private pingClient(clientAddress: string) {
+        const totalPackets = 10;            // 送信するICMPパケットの総数
+        ping.promise.probe(clientAddress)
+          .then((result: any) => {
+            if (result.alive) {
+                console.log(`クライアント ${clientAddress} への応答時間: ${result.time} ms`);
+                this.totalLatency += result.time;
+                this.receivedPackets++;
+                this.sentPackets++;
+            } else {
+                console.log(`クライアント ${clientAddress} に到達できませんでした。`);
+                this.sentPackets++;
+            }
+      
+            if (this.sentPackets !== totalPackets) {
+                setTimeout(() => this.pingClient(clientAddress), 100); // 0.1秒ごとにクライアントにpingを送信
+            } else {
+                this.packetLossRate = ((totalPackets - this.receivedPackets) / totalPackets) * 100;
+                this.latency = this.totalLatency / totalPackets;
+                console.log(`通信遅延: ${this.latency}`);
+                console.log(`パケットロス率: ${this.packetLossRate.toFixed(2)}%`);
+                this.isSchemeChangeDone = false;
+            }
+          })
+          .catch((error: Error) => {
+                console.error('エラー:', error);
+          });
     }
 }
